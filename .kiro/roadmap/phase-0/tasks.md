@@ -31,18 +31,23 @@ Tasks are ordered by dependency. Checked items indicate that a draft artifact ex
 - [x] 3.1 Select structured output and bounded retry handling as the representative topic. (R5)
 - [x] 3.2 Define baseline, teaching, grilling, scenario, implementation, validation, reflection, and review activities. (R5)
 - [x] 3.3 Define explicit workflow states, loops, interruptions, and terminal outcomes. (R5, R8)
-- [x] 3.4 Define the facilitator rubric, evidence captured, and privacy boundary. (R5, R6)
+- [x] 3.4 Define the automated rubric, evidence captured, and privacy boundary. (R5, R6, R12)
 - [x] 3.5 Pre-register the participant protocol and success thresholds. (R6)
-- [x] 3.6 Create the minimal facilitator materials and runnable TypeScript exercise. (R5)
-  - Evidence: [`../../../prototypes/learning-loop/`](../../../prototypes/learning-loop/), including a typed XState browser prototype, versioned local recovery, anonymized export, deterministic exercise validator, facilitator reference, workbook, guide, and research record.
+- [x] 3.6 Create the minimal solo learning-loop prototype and runnable TypeScript exercise. (R5, R12)
+  - Evidence: [`../../../prototypes/learning-loop/`](../../../prototypes/learning-loop/), including a typed XState browser prototype, versioned local recovery, evidence-linked automated evaluation, anonymized export, deterministic exercise validator, workbook, and research record.
   - Hands-on evidence: a safe virtual terminal implements inspect, repair, deterministic check, failure, retry, and success states without arbitrary command execution. (R11)
   - Validation: strict typecheck, production build, and 7/7 reference validator checks pass.
 - [x] 3.6a Implement the terminal/checkpoint interaction hypothesis before remote lab investment. (R11)
-- [ ] 3.7 Obtain technical and instructional review of the prototype. (R5, R11)
-- [ ] 3.8 Recruit at least five representative learners with informed consent. (R6)
-- [ ] 3.9 Run sessions using the fixed script and anonymized participant IDs. (R6)
-- [ ] 3.10 Analyze results without changing thresholds after observation. (R6)
-  - Tooling ready: [`../../../prototypes/learning-loop/analyze-results.mjs`](../../../prototypes/learning-loop/analyze-results.mjs) applies the pre-registered thresholds.
+- [x] 3.6b Align browser export, automated scoring, example records, and aggregate analysis to one runtime-validated research schema. (R6, R11, R12)
+  - Evidence: automated evaluation is an explicit machine state; schema v3 records contain evaluator provenance and report hands-on metrics separately.
+  - Validation: canonical five-record analysis returns `proceed`; unrelated JSON is rejected with a field-specific error.
+- [x] 3.6c Replace manual per-session grading with a solo smart-evaluation flow. (R12)
+  - Evidence: explicit `evaluating` state, transparent evidence/missing-concept feedback, deterministic lab authority, and learner-only experience questions.
+- [ ] 3.7 Obtain technical and instructional review of the prototype. (R5, R11, R12)
+- [ ] 3.8 Recruit at least five representative learners with informed consent for research collection. (R6)
+- [ ] 3.9 Run solo sessions using anonymous session IDs and the fixed prototype. (R6)
+- [ ] 3.10 Analyze real participant results without changing thresholds after observation. (R6)
+  - Tooling ready: [`../../../prototypes/learning-loop/analyze-results.mjs`](../../../prototypes/learning-loop/analyze-results.mjs) validates schema v1/v2 records, applies the pre-registered thresholds, and reports hands-on metrics separately.
 - [ ] 3.11 Record proceed, revise, or stop decision and required changes. (R6)
 
 ## 4. Approve portable architecture and state model

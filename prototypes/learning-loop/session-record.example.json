@@ -1,8 +1,12 @@
 {
+  "schemaVersion": 2,
   "participantId": "P001",
   "valid": true,
   "completedWithoutHelp": true,
   "durationMinutes": 31,
+  "baselineConfidence": 2,
+  "finalConfidence": 4,
+  "hintsUsed": 1,
   "baseline": {
     "outputHandling": 1,
     "safety": 1,
@@ -18,5 +22,12 @@
   "identifiedMalformedOutput": true,
   "identifiedUnboundedRetry": true,
   "explainedDeterministicValidation": true,
-  "severeUnresolvedIssue": false
+  "severeUnresolvedIssue": false,
+  "miniLabImprovedUnderstanding": true,
+  "wouldChooseDeeperLab": true,
+  "lab": {
+    "passed": true,
+    "checksRun": 2,
+    "commandsEntered": 7
+  }
 }

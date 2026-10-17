@@ -7,6 +7,7 @@ export const steps = [
   "implementing",
   "validating",
   "reflecting",
+  "review",
   "complete",
 ] as const;
 
@@ -21,6 +22,7 @@ export const titles: Record<Step, string> = {
   implementing: "Repair the behavior",
   validating: "Validate deterministically",
   reflecting: "Explain the final design",
+  review: "Your evaluation",
   complete: "Session complete",
 };
 

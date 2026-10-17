@@ -79,11 +79,11 @@ Score each dimension from 0 to 3:
 - Operations: absent; logs only; useful metrics; connection between observability, retries, latency, cost, and diagnosis.
 - Trade-offs: unsupported; one factor; multiple constraints; defended choice with conditions for change.
 
-A facilitator records observable evidence rather than inferred intent.
+The Phase 0 prototype records observable evidence automatically and reports the rubric criteria it detected or missed. These provisional results are used to test the feedback interaction, not to claim authoritative mastery.
 
 ### Research method
 
-Run the same materials, script, hints, and rubric with at least five representative learners. Use participant IDs, obtain consent, and collect only baseline/final rubric results, confidence, misconceptions, scenario constraints, validator outcomes, hints, timing, abandonment, and participant feedback. Apply the success thresholds in requirements R6 before reviewing results.
+Run the same solo prototype with at least five representative learners. Use anonymous session IDs, obtain consent for any research collection, and collect only automated rubric results, confidence, validator outcomes, hints, timing, completion, and optional participant feedback. Apply the success thresholds in requirements R6 before reviewing aggregate results.
 
 ## Architecture decisions
 
@@ -175,3 +175,11 @@ The nested XState lifecycle is:
 A failed check returns to repair; only a successful check unlocks progression. The persisted workspace includes simulated configuration and a bounded transcript. Research export contains pass status, check count, and command count, but excludes command text.
 
 This prototype tests usability and learning value only. Disposable containers, authenticated terminals, authoritative remote validators, tenant isolation, quotas, TTLs, and teardown remain Phase 6 work.
+
+## Solo smart evaluation
+
+The learner experience is self-directed. There is no facilitator review state or human grading dependency. After reflection, the workflow enters `evaluating`, produces an evidence-linked result, and then enters learner `review`.
+
+Phase 0 uses a transparent local rubric evaluator to test the feedback interaction. It detects explicit concepts, reports a 0-3 score per dimension, shows matched and missing rubric criteria, and combines those results with deterministic lab checks. This heuristic can miss valid phrasing and is labeled provisional; it is not a production grading architecture.
+
+Production free-response evaluation is a server-side actor using versioned rubrics and structured outputs. Its lifecycle includes submitting, evaluating, validating, retrying within bounds, feedback, challenged, degraded fallback, and failed states. Deterministic validators remain authoritative for objective and lab behavior. Evaluation provenance includes course, content, rubric, evaluator, and model or ruleset versions.

@@ -55,7 +55,7 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 
 ## Phase 0: Product and technical validation
 
-**Status:** Specification and runnable XState browser learning-loop prototype complete; product, SME, engineering, security, operations, and learner validation remain pending. Track execution in [`phase-0/tasks.md`](phase-0/tasks.md).
+**Status:** Specification, runnable solo XState learning-loop/mini-lab prototype, transparent smart evaluation, and validated research-data pipeline complete; product, SME, engineering, security, operations, and real learner validation remain pending. Track execution in [`phase-0/tasks.md`](phase-0/tasks.md).
 
 **Specification:**
 

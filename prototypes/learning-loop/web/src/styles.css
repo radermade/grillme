@@ -30,8 +30,10 @@ textarea:focus, input:focus, button:focus, select:focus { outline: 3px solid #e0
 .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
 .primary, .secondary { border-radius: .45rem; padding: .7rem 1rem; font-weight: 700; }
 .primary { background: #9e2a2b; border: 2px solid #9e2a2b; color: #fff; }
+.primary:disabled { background: #737b87; border-color: #737b87; cursor: not-allowed; opacity: .8; }
 .secondary { background: transparent; border: 2px solid #526276; color: inherit; }
 .hint { border-left: .3rem solid #e09f3e; padding-left: 1rem; }
+.required { color: #9e2a2b; font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 .lab { background: #101820; color: #e6edf3; border-radius: .65rem; padding: 1rem; margin: 1rem 0; }
 .terminal { min-height: 14rem; max-height: 22rem; overflow: auto; white-space: pre-wrap; font: .9rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .terminal p { margin: .25rem 0; }
@@ -41,6 +43,15 @@ textarea:focus, input:focus, button:focus, select:focus { outline: 3px solid #e0
 .command-line { display: grid; grid-template-columns: auto 1fr auto; gap: .5rem; align-items: center; }
 .command-line input { width: 100%; margin: 0; color: #101820; background: #fff; }
 .lab-state { font-weight: 700; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+caption { text-align: left; font-weight: 700; margin-bottom: .5rem; }
+th, td { padding: .6rem; border: 1px solid #c8d0da; text-align: left; }
+td select { margin: 0; }
+.observations { display: grid; gap: .75rem; }
+.observation { border: 1px solid #c8d0da; border-radius: .5rem; padding: .75rem; }
+.observation label { display: inline-flex; align-items: center; gap: .35rem; margin-right: 1rem; }
+.observation input { margin: 0; }
 .status { min-height: 1.5rem; }
 @media (max-width: 720px) { .shell { display: block; } .sidebar { padding: 1rem; } .progress { display: none; } .main { padding: 2rem 1rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }

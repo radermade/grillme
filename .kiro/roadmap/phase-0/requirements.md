@@ -69,7 +69,7 @@ The learning loop must be tested with at least five people matching the proposed
 
 Acceptance criteria:
 
-1. At least four participants finish without unscripted facilitator help.
+1. At least four participants finish the solo flow without external help.
 2. At least four improve by one rubric level from baseline to final explanation.
 3. At least four identify malformed-output and unbounded-retry risks.
 4. At least four explain why deterministic validation remains necessary after model generation.
@@ -140,3 +140,17 @@ Acceptance criteria:
 4. Commands use a fixed simulated language and never execute arbitrary shell input.
 5. Research records attempts and outcomes without exporting command contents.
 6. Participants are asked whether the interaction improved understanding and whether they would use a deeper implementation lab.
+
+## R12: Solo smart evaluation
+
+The customer learning experience must not require a facilitator, instructor, or human grader.
+
+Acceptance criteria:
+
+1. Objective tasks and labs use deterministic validators.
+2. Written responses are evaluated against explicit, versioned rubrics with evidence and missing concepts shown to the learner.
+3. Automated evaluation states are explicit and can fail, retry, or fall back without losing learner work.
+4. Production AI-assisted evaluation is server-mediated, runtime-validated, bounded by timeout/retry/cost policy, and never the sole authority for deterministic tasks.
+5. Evaluation records retain rubric, evaluator, model or ruleset, course, and content versions.
+6. The learner can challenge or report unclear feedback.
+7. Human experts review course and rubric quality, not individual customer sessions by default.

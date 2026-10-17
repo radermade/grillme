@@ -1,20 +1,20 @@
 # Prototype Research Record
 
-Do not record names or direct identifiers. Create one copy per session and one aggregate copy after all sessions.
+The app exports anonymous per-session metrics automatically. Use this document only to summarize opt-in usability research and aggregate findings. Do not record names or direct identifiers.
 
 ## Session
 
 - Participant ID:
 - Date:
-- Facilitator ID:
 - Consent recorded: yes / no
 - Target-profile fit: yes / no / uncertain
 - Session valid: yes / no
 - Start and end time:
-- Completed without unscripted help: yes / no
+- Completed solo: yes / no
 - Completion state: complete / paused / abandoned / failed
-- Implementation attempts:
-- Hints used: none / 1 / 1-2 / 1-3
+- Implementation check attempts:
+- Lab passed: yes / no
+- Hints used, 0-3:
 
 ## Evidence
 
@@ -32,8 +32,8 @@ Do not record names or direct identifiers. Create one copy per session and one a
 - Explained need for deterministic validation: yes / no
 - Recurring misconceptions:
 - Accessibility, safety, privacy, or trust issue:
-- Mini-lab improved understanding: yes / no / uncertain
-- Would choose a deeper hands-on lab: yes / no / uncertain
+- Mini-lab improved understanding: yes / no
+- Would choose a deeper hands-on lab: yes / no
 - Mini-lab usability notes:
 - Interview notes:
 
