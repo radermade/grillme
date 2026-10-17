@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import type { ReadinessEvidence, SyncEvent } from "@grillme/domain";
 import type { ApiPath, PlatformPorts, StoragePort, SyncQueuePort, UpdatePort } from "@grillme/platform";
-import { assessmentReadinessEvidence, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, scenarioReadinessEvidence } from "@grillme/evaluation";
+import { assessmentReadinessEvidence, createDeterministicConsolePort, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, scenarioReadinessEvidence } from "@grillme/evaluation";
 import { learningFixtures, parseAssessment, parseAssessmentResponse, parseGrillEvidence, parseLab, parseLabEvidence, parseMock, parseMockEvidence, parseScenario, parseScenarioEvidence } from "@grillme/content";
 
 const storage: StoragePort = {
@@ -57,6 +57,7 @@ export const platform: PlatformPorts = {
 };
 
 export const updates: UpdatePort = { async check() { return { available: false }; } };
+export const semanticConsole = createDeterministicConsolePort(platform.clock.now);
 
 export const loadMetadata = async (): Promise<{ version: string }> => {
   if (!("__TAURI_INTERNALS__" in window)) return { version: "web-preview" };

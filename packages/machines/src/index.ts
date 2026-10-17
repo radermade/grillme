@@ -25,3 +25,5 @@ export { createEntitlementMachine } from "./entitlement";
 export { createPrivacyMachine } from "./privacy";
 export { createReleaseMachine } from "./release";
 export { createSupportMachine } from "./support";
+export { createThemeMachine } from "./theme";
+export { createConsoleSessionMachine } from "./console-session";

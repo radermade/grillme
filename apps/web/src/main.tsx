@@ -5,14 +5,14 @@ import { ErrorBoundary, UiRuntimeProvider, Workspace, type UiRuntime } from "@gr
 import {
   analytics, auth, connectivity, contentReports, entitlements, labs, loadMetadata,
   platform, privacy, queue, readinessEvidence, releases, remote, restrictedAws,
-  support, updates,
+  semanticConsole, support, updates,
 } from "./adapters";
 import { webNavigation } from "./routes";
 import "@grillme/ui/styles.css";
 
 const runtime: UiRuntime = {
   platform: { ...platform, syncQueue: queue }, auth, connectivity, sync: remote,
-  labs, aws: restrictedAws, readiness: readinessEvidence, contentReports,
+  labs, console: semanticConsole, aws: restrictedAws, readiness: readinessEvidence, contentReports,
   analytics, privacy, entitlements, releases, support, loadMetadata, updates,
   fixtures: learningFixtures, applicationPlatform: "web", workspaceNavigation: webNavigation,
 };

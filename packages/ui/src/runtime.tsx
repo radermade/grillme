@@ -1,13 +1,13 @@
 import { createContext, useContext, type ReactNode } from "react";
 import type { LearningFixtures } from "@grillme/content";
 import type {
-  AuthPort, AwsLabPort, ConnectivityPort, ContentReportPort, EntitlementPort,
+  AuthPort, AwsLabPort, ConnectivityPort, ConsolePort, ContentReportPort, EntitlementPort,
   LabPort, PlatformPorts, PrivacyPort, ProductAnalyticsPort, ReadinessEvidencePort,
   ReleasePort, SupportPort, SyncPort, SyncQueuePort, UpdatePort,
 } from "@grillme/platform";
 
 export type LoadMetadata = () => Promise<{ version: string }>;
-export type WorkspaceView = "course" | "assessment" | "grill" | "training" | "lab" | "readiness" | "mock" | "operations" | "review";
+export type WorkspaceView = "course" | "assessment" | "grill" | "training" | "console" | "lab" | "readiness" | "mock" | "operations" | "review";
 export type WorkspaceLocation = { view: WorkspaceView; lessonId?: string };
 export interface WorkspaceNavigation {
   current(): WorkspaceLocation;
@@ -21,6 +21,7 @@ export type UiRuntime = {
   connectivity: ConnectivityPort;
   sync: SyncPort;
   labs: LabPort;
+  console: ConsolePort;
   aws: AwsLabPort;
   readiness: ReadinessEvidencePort;
   contentReports: ContentReportPort;

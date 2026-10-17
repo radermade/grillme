@@ -1,6 +1,6 @@
 import type { WorkspaceLocation, WorkspaceNavigation } from "@grillme/ui";
 
-const views = new Set<WorkspaceLocation["view"]>(["course", "assessment", "grill", "training", "lab", "readiness", "mock", "operations", "review"]);
+const views = new Set<WorkspaceLocation["view"]>(["course", "assessment", "grill", "training", "console", "lab", "readiness", "mock", "operations", "review"]);
 export const parseWebLocation = (pathname: string): WorkspaceLocation => {
   const segments = pathname.split("/").filter(Boolean).map(decodeURIComponent);
   if (segments[0] === "learn") {

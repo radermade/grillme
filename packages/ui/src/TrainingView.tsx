@@ -4,6 +4,7 @@ import { createScenarioSessionMachine } from "@grillme/machines";
 import type { Scenario, ScenarioMode } from "@grillme/domain";
 import { useUiRuntime } from "./runtime";
 
+import { CommandBar } from "./primitives";
 const modes: Array<{ id: ScenarioMode; title: string; description: string }> = [
   { id: "walkthrough", title: "Walkthrough", description: "Instructions and rationale are visible before each checkpoint." },
   { id: "practice", title: "Practice", description: "Work from objectives and reveal progressive hints when needed." },
@@ -47,6 +48,6 @@ export function TrainingView() {
     {scenario.availableComponents.length > 1 && <fieldset><legend>Add a directed connection</legend><label>From<select value={from} onChange={(event) => setFrom(event.target.value)}><option value="">Choose component</option>{workspace.selectedComponents.map((id) => <option key={id} value={id}>{scenario.availableComponents.find((item) => item.id === id)?.label}</option>)}</select></label><label>To<select value={to} onChange={(event) => setTo(event.target.value)}><option value="">Choose component</option>{workspace.selectedComponents.map((id) => <option key={id} value={id}>{scenario.availableComponents.find((item) => item.id === id)?.label}</option>)}</select></label><button className="secondary" disabled={!from || !to || from === to} onClick={() => send({ type: "CONNECT", from, to })}>Add connection</button><ul>{workspace.connections.map((connection) => <li key={`${connection.from}-${connection.to}`}>{connection.from} → {connection.to}</li>)}</ul></fieldset>}
     {scenario.availableSettings.length > 0 && <fieldset><legend>Configuration</legend>{scenario.availableSettings.map((setting) => <label className="setting" key={setting.id}>{setting.label}<select value={workspace.settings[setting.id] ?? ""} onChange={(event) => send({ type: "SET_SETTING", settingId: setting.id, value: event.target.value })}>{setting.options.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>)}</fieldset>}
     {scenario.kind === "debugging" && <label><strong>Diagnosis</strong><textarea value={workspace.diagnosis} maxLength={5_000} onChange={(event) => send({ type: "SET_DIAGNOSIS", value: event.target.value })} /></label>}
-    <div className="actions">{context.mode === "practice" && context.progress.hintLevel < checkpoint.hints.length && <button className="secondary" onClick={() => send({ type: "SHOW_HINT" })}>Show next hint</button>}<button className="secondary" onClick={() => send({ type: "RESET_CHECKPOINT" })}>Reset checkpoint</button><button className="primary" onClick={() => send({ type: "VALIDATE" })}>Validate outcomes</button></div>
+    <CommandBar label="Scenario actions">{context.mode === "practice" && context.progress.hintLevel < checkpoint.hints.length && <button className="secondary" onClick={() => send({ type: "SHOW_HINT" })}>Show next hint</button>}<button className="secondary" onClick={() => send({ type: "RESET_CHECKPOINT" })}>Reset checkpoint</button><button className="primary" onClick={() => send({ type: "VALIDATE" })}>Validate outcomes</button></CommandBar>
   </main>;
 }

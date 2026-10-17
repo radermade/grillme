@@ -4,14 +4,14 @@ import { learningFixtures } from "@grillme/content";
 import { ErrorBoundary, UiRuntimeProvider, Workspace, type UiRuntime } from "@grillme/ui";
 import {
   analytics, auth, connectivity, contentReports, entitlements, labs, loadMetadata,
-  platform, privacy, readinessEvidence, releases, restrictedAws, support,
+  platform, privacy, readinessEvidence, releases, restrictedAws, semanticConsole, support,
   syncQueue, syncRemote, updates, workspaceNavigation,
 } from "./adapters";
 import "@grillme/ui/styles.css";
 
 const runtime: UiRuntime = {
   platform: { ...platform, syncQueue }, auth, connectivity, sync: syncRemote,
-  labs, aws: restrictedAws, readiness: readinessEvidence, contentReports,
+  labs, console: semanticConsole, aws: restrictedAws, readiness: readinessEvidence, contentReports,
   analytics, privacy, entitlements, releases, support, loadMetadata, updates,
   fixtures: learningFixtures, applicationPlatform: "desktop", workspaceNavigation,
 };

@@ -10,10 +10,11 @@ import readinessRules from "../fixtures/readiness-rules.json";
 import release from "../fixtures/release.json";
 import requirements from "../fixtures/requirements.json";
 import scenarios from "../fixtures/scenarios.json";
+import semanticConsole from "../fixtures/semantic-console.json";
 import skills from "../fixtures/skills.json";
 
 export const learningFixtures = {
   assessment, awsLabPolicy, courseCoverage, courseRelease, course, grill, lab,
-  mock, readinessRules, release, requirements, scenarios, skills,
+  mock, readinessRules, release, requirements, scenarios, semanticConsole, skills,
 };
 export type LearningFixtures = typeof learningFixtures;

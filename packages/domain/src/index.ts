@@ -1,3 +1,4 @@
+export * from "./console";
 export * from "./scenario";
 export * from "./auth";
 export * from "./sync";
@@ -9,6 +10,7 @@ export * from "./content-governance";
 export * from "./operations";
 export * from "./commercial";
 export * from "./mobile-discovery";
+export * from "./theme";
 export * from "./grill";
 export * from "./assessment";
 export * from "./review";

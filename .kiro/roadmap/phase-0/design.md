@@ -111,6 +111,16 @@ Record appendable learning events with stable IDs, schema version, course versio
 
 Define provider-neutral operations for request, provision, connect, validate, stop, expire, and clean. Sandbox and AWS providers remain server-side and satisfy the same TTL, quota, audit, validation, and cleanup contract.
 
+### Console simulation, drift, and managed companion
+
+Separate durable learning invariants from AWS semantic mappings, console presentation mappings, and validators. Console simulation uses stable semantic resource and operation IDs rather than copied pixels or click coordinates.
+
+Console drift monitoring is an internal, allowlisted canary process separate from learner clients and authoritative grading. It runs approved journeys only in dedicated non-production accounts with short-lived workload identity, bounded navigation, redacted observations, retention limits, budgets, and cleanup. Detected changes require human review and cannot publish automatically.
+
+Validation uses versioned `passed`, `failed`, and `inconclusive` outcomes. Infrastructure, permission, unsupported-region, stale-compatibility, and suspected-drift failures are inconclusive rather than learner failures. Active sessions pin mapping, template, provider, region, and validator bundle versions.
+
+Managed console companion mode may return a one-time, short-lived, policy-restricted console federation URL after server authorization. Raw AWS credentials never reach the client. Learners never paste AWS keys into settings. Server-side validation, budget, audit, revocation, and teardown remain authoritative.
+
 ## Platform capability contracts
 
 Slice 1.1 defines interfaces for versioned storage, secure secret storage, HTTP transport, connectivity, telemetry, clock, ID generation, application lifecycle, updater, and external navigation. Machine actors receive them through dependency injection. Desktop adapters come first; browser and mobile adapters preserve domain events and workflow semantics.
@@ -142,6 +152,11 @@ Slice 1.1 defines interfaces for versioned storage, secure secret storage, HTTP 
 | Resource or cost runaway | TTL, quotas, budgets, tags, teardown, independent sweeper | Forced-failure cleanup tests | Unassigned |
 | Sensitive telemetry | Field allowlists, redaction, retention, deletion controls | Privacy review and sample inspection | Unassigned |
 | Dependency/update compromise | Locked dependencies, provenance, signed staged releases, rollback | Build and update verification | Unassigned |
+| Console crawler scope escape | Allowlisted origins/journeys, short-lived workload identity, page/time budgets, dedicated accounts, fail-closed navigation | Scope-escape and cleanup tests | Unassigned |
+| Console observation data leak | Dedicated synthetic resources, redaction, encrypted bounded artifacts, retention limits, audited access | Artifact privacy review and seeded-identifier tests | Unassigned |
+| Automatic drift publication | Detection/review separation, role-separated approvals, versioned release and rollback | Attempted auto-publish test | Unassigned |
+| Validator drift causes false failure or pass | Versioned compatibility, known-good/known-bad canaries, inconclusive outcomes, stale-health blocking | Seeded false-pass/false-fail tests | Unassigned |
+| Console federation session abuse | One-time short-lived URLs, managed accounts, policy boundaries, audit, revocation before cleanup | Session replay and privilege tests | Unassigned |
 
 A high-risk threat must have an owner before its affected feature reaches customer testing.
 
@@ -157,6 +172,11 @@ These targets are provisional until provider selection and measurement:
 - Clients never receive or persist permanent cloud credentials.
 - Hard model and lab spending ceilings exist before public beta.
 - Security-relevant control-plane actions produce tamper-resistant audit events.
+- Critical console journeys have risk-based verification freshness and reviewed drift baselines before use in released walkthroughs.
+- Critical validators have known-good and known-bad canaries; stale or unhealthy validators block new scored sessions.
+- Inconclusive validation preserves learner work and consumes no attempt quota.
+- Console canary observations and screenshots use approved retention limits and contain no customer or learner data.
+- Managed console sessions expose no raw AWS credentials and revoke before environment cleanup.
 
 ## Deferred provider decisions
 

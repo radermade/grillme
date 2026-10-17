@@ -4,6 +4,7 @@ import { createAppMachine, createCourseSessionMachine } from "@grillme/machines"
 import type { ContentBlock, Course, CourseProgress, Lesson } from "@grillme/domain";
 import { useUiRuntime } from "./runtime";
 
+import { CommandBar } from "./primitives";
 const blocks = (items: ContentBlock[]) => items.map((block, index) => {
   if (block.type === "text") return <p key={index}>{block.body}</p>;
   if (block.type === "code") return <pre key={index}><code>{block.code}</code></pre>;
@@ -74,11 +75,11 @@ export function App({ initialLessonId, onLessonChange }: { initialLessonId?: str
         <p>{courseState.context.error?.message}</p>
         <div className="actions"><button className="primary" onClick={() => sendCourse({ type: "RETRY" })}>Retry save</button><button className="secondary" onClick={() => sendCourse({ type: "CONTINUE_OFFLINE" })}>Continue unsaved</button></div>
       </div>}
-      <div className="actions">
+      <CommandBar label="Lesson actions">
         <button className="secondary" disabled={currentIndex === 0} onClick={() => sendCourse({ type: "PREVIOUS" })}>Previous</button>
         <button className="secondary" disabled={isComplete} onClick={() => sendCourse({ type: "COMPLETE" })}>{isComplete ? "Completed" : "Mark complete"}</button>
         <button className="primary" disabled={currentIndex === lessons.length - 1} onClick={() => sendCourse({ type: "NEXT" })}>Next lesson</button>
-      </div>
+      </CommandBar>
       <footer><p>Course version {course.version} · App {appState.context.metadata?.version ?? "unknown"}</p>
         {navigationError && <p role="alert">{navigationError}</p>}
         {course.sources.map((source) => <p key={source.url}><button className="source-link" onClick={() => void openSource(source.url)}>Open source: {source.title}</button></p>)}

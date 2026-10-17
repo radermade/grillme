@@ -1,7 +1,7 @@
 import type { ReadinessEvidence, SyncEvent } from "@grillme/domain";
 import type { ApiPath, AuthPort, ConnectivityPort, PlatformPorts, StoragePort, SyncPort, SyncQueuePort, UpdatePort } from "@grillme/platform";
 import { learningFixtures, parseAssessment, parseAssessmentResponse, parseGrillEvidence, parseLab, parseLabEvidence, parseMock, parseMockEvidence, parseScenario, parseScenarioEvidence } from "@grillme/content";
-import { assessmentReadinessEvidence, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, scenarioReadinessEvidence } from "@grillme/evaluation";
+import { assessmentReadinessEvidence, createDeterministicConsolePort, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, scenarioReadinessEvidence } from "@grillme/evaluation";
 
 import { browserStorage } from "./storage";
 
@@ -89,6 +89,7 @@ export const platform: PlatformPorts = {
 };
 
 export const updates: UpdatePort = { async check() { return { available: false }; } };
+export const semanticConsole = createDeterministicConsolePort(clock.now);
 export const loadMetadata = async (): Promise<{ version: string }> => ({ version: "web" });
 
 export const readinessEvidence: import("@grillme/platform").ReadinessEvidencePort = {

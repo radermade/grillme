@@ -47,6 +47,10 @@ export interface ProductAnalyticsPort {
   submit(events: import("@grillme/domain").ProductAnalyticsEvent[]): Promise<void>;
   delete(): Promise<void>;
 }
+export interface ConsolePort {
+  operate(request: import("@grillme/domain").ConsoleOperationRequest): Promise<unknown>;
+  validate(scenarioId: string, scenarioVersion: string, checkpointId: string, state: import("@grillme/domain").SemanticConsoleState): Promise<unknown>;
+}
 export interface PrivacyPort { request(value: import("@grillme/domain").PrivacyRequest): Promise<unknown> }
 export interface SupportPort { submit(snapshot: import("@grillme/domain").SupportSnapshot): Promise<unknown>; export(): Promise<unknown> }
 export interface EntitlementPort { load(): Promise<unknown> }

@@ -382,6 +382,118 @@ Deliver six to ten sandbox labs spanning:
 
 **Exit criteria:** The selected mobile workflows improve retention or convenience in user testing and do not require platform code in shared domain or machine packages.
 
+## Phase 11: Dark developer workspace
+
+**Status:** Implementation complete and automated checks passed; visual regression and manual accessibility review remain pending. See [`phase-11/requirements.md`](phase-11/requirements.md), [`phase-11/design.md`](phase-11/design.md), and [`phase-11/tasks.md`](phase-11/tasks.md).
+
+**Goal:** Establish an original dark-first developer learning environment with accessible portable primitives.
+
+### Slice 11.1: Visual system
+
+- Define semantic tokens for dark, light, status, focus, motion, density, and elevation.
+- Build the minimum IDE/operations-style primitives for navigation, panels, tables, forms, logs, dialogs, timers, and coach callouts.
+- Migrate desktop and web without moving workflow rules into React.
+
+**Exit criteria:** Representative lesson, grill, scenario, and lab states render consistently on desktop and web, and manual assistive-technology review has no unresolved critical issue.
+
+## Phase 12: Semantic AWS Console simulation
+
+**Status:** Implementation complete and automated checks passed; manual keyboard/accessibility review and learner comparison remain pending. See [`phase-12/requirements.md`](phase-12/requirements.md), [`phase-12/design.md`](phase-12/design.md), and [`phase-12/tasks.md`](phase-12/tasks.md).
+
+**Goal:** Teach AWS-console familiarity through a versioned semantic model while preserving durable capability outcomes.
+
+### Slice 12.1: Console model and renderer
+
+- Model services, resources, relationships, views, forms, operations, and outcomes with stable semantic IDs.
+- Render AWS-familiar service navigation, resource tables, breadcrumbs, details, configuration flows, logs, and status feedback without copying AWS trade dress.
+- Target coach overlays by semantic IDs rather than coordinates or internal DOM selectors.
+
+### Slice 12.2: Guidance progression
+
+- Run one Bedrock-centered scenario in walkthrough, practice, and challenge modes over the same state and validation rules.
+- Version learning intent, AWS semantic mapping, presentation mapping, and guidance separately.
+- Preserve reset, revision, debrief, and guidance-aware evidence.
+
+**Exit criteria:** One representative scenario operates safely in all three modes and can swap simulator providers later without changing its learning invariant.
+
+## Phase 13: AWS Console drift crawler
+
+**Status:** Planned; legal, security, privacy, and AWS-usage approval required before automation. See [`phase-13/requirements.md`](phase-13/requirements.md), [`phase-13/design.md`](phase-13/design.md), and [`phase-13/tasks.md`](phase-13/tasks.md).
+
+**Goal:** Detect presentation and navigation drift through a separate, bounded internal console-canary process.
+
+### Slice 13.1: Allowlisted console journeys
+
+- Run approved journeys only in dedicated non-production accounts using short-lived workload identity.
+- Capture approved visible labels, accessibility landmarks, routes, screenshots, region/service context, and timestamps.
+- Enforce allowed origins, start routes, page count, duration, fields, redaction, retention, budgets, and cleanup.
+- Never use customer accounts, learner data, static AWS keys, unrestricted crawling, or undocumented internal API interception.
+
+### Slice 13.2: Human-reviewed drift workflow
+
+- Compare semantic landmarks, labels, routes, and optional perceptual screenshots against approved baselines.
+- Create suspected-drift records; never auto-publish content or validators.
+- Let reviewers classify, reject, accept, disable stale guidance, and release a new presentation-mapping version through content governance.
+
+**Primary machine:** `scheduled -> authorizing -> navigating -> observing -> diffing -> suspectedDrift -> awaitingReview -> accepted|rejected -> closed`, with failure, timeout, retry, and cleanup.
+
+**Exit criteria:** Bedrock console canaries detect seeded changes and complete a reviewed mapping-update workflow without automatic publication or customer data.
+
+## Phase 14: Validator compatibility and canaries
+
+**Status:** Planned; depends on semantic simulation and deployed canary infrastructure. See [`phase-14/requirements.md`](phase-14/requirements.md), [`phase-14/design.md`](phase-14/design.md), and [`phase-14/tasks.md`](phase-14/tasks.md).
+
+**Goal:** Prevent AWS/API drift from becoming false learner failures or false passes.
+
+### Slice 14.1: Versioned compatibility
+
+- Replace binary validation with `passed`, `failed`, and `inconclusive` outcomes.
+- Record validator, mapping, template, provider, API/SDK, region, evidence, and observation versions.
+- Pin active sessions to immutable compatibility and validator bundles.
+- Preserve historical evidence while allowing readiness to be recomputed when a validator is withdrawn.
+
+### Slice 14.2: Known-good and known-bad canaries
+
+- Require known-good fixtures to pass and known-bad fixtures to fail for intended reasons.
+- Run canaries against semantic simulator, controlled sandbox, and applicable live managed environments.
+- Probe service/model/region support, validator permissions, template deployability, and cost policy before provisioning.
+- Block new sessions when validator health is stale, disabled, or drift-suspected; inconclusive attempts preserve work and consume no learner attempt quota.
+
+**Exit criteria:** Critical validators have fresh compatibility records and canaries that detect seeded false-pass and false-fail regressions with safe learner degradation.
+
+## Phase 15: Managed AWS Console companion
+
+**Status:** Planned; high-risk deployment requires approved isolation, federation, budgets, audit, and cleanup. See [`phase-15/requirements.md`](phase-15/requirements.md), [`phase-15/design.md`](phase-15/design.md), and [`phase-15/tasks.md`](phase-15/tasks.md).
+
+**Goal:** Combine simulation with actual AWS-console familiarity in isolated managed environments.
+
+### Slice 15.1: Console session and sandbox connection
+
+- Allocate managed environments only after identity, entitlement, quota, policy, compatibility-health, duration, concurrency, and budget checks.
+- Return a one-time, short-lived, policy-restricted console federation URL, never raw AWS credentials.
+- Open AWS Console in a separate browser context while Grill Me remains the guidance pane.
+- Validate observable resource state server-side and revoke access before cleanup.
+
+### Slice 15.2: Bedrock companion pilot
+
+- Connect one semantic Bedrock scenario to simulator, disposable sandbox, and managed AWS adapters.
+- Pin policy, account assignment, region, mappings, template, and validator bundle for the session.
+- Compare simulation-only, companion-guided console, and reduced-guidance challenge experiences.
+
+**Exit criteria:** A learner completes and reconnects to a managed Bedrock console lab without handling credentials; access expires, resources are cleaned, and security tests confirm all intended boundaries.
+
+## Phase 16: Drift operations and authoring support
+
+**Status:** Planned; depends on crawler and validator evidence. See [`phase-16/requirements.md`](phase-16/requirements.md), [`phase-16/design.md`](phase-16/design.md), and [`phase-16/tasks.md`](phase-16/tasks.md).
+
+**Goal:** Turn detected console and validator drift into safe, reviewed, reversible content and compatibility releases.
+
+- Combine crawler observations, validator canaries, official-source changes, provider incidents, and learner reports into one drift-case workflow.
+- Support stale guidance, inconclusive validation, paused provisioning, staged updates, and rollback without deleting learner work.
+- Add internal versioned mapping/compatibility authoring with role-separated review; private validators remain server-side.
+
+**Exit criteria:** Seeded console and validator drift incidents move from detection through learner mitigation, reviewed correction, full canary validation, staged release, and closure with complete audit evidence.
+
 ## Cross-cutting release gates
 
 Every slice must satisfy the gates relevant to its risk:

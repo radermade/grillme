@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "bedrock-guardrail-console",
+  "version": "1.0.0",
+  "simulatorVersion": "1.0.0",
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "title": "Configure and troubleshoot a Bedrock guardrail",
+  "description": "Practice durable Bedrock console intent in an AWS-familiar semantic simulator.",
+  "skillIds": ["bedrock-integration", "output-safety", "safe-observability"],
+  "mapping": {
+    "semanticVersion": "1.0.0",
+    "awsVersion": "2026.10",
+    "presentationVersion": "1.0.0",
+    "lastVerifiedAt": "2026-10-17"
+  },
+  "services": [
+    { "id": "amazon-bedrock", "targetId": "service-search-bedrock", "name": "Amazon Bedrock", "description": "Build and govern generative AI applications." }
+  ],
+  "views": [
+    { "id": "guardrails-list", "targetId": "bedrock-guardrails", "serviceId": "amazon-bedrock", "title": "Guardrails", "type": "list" },
+    { "id": "guardrail-details", "targetId": "guardrail-policy-details", "serviceId": "amazon-bedrock", "title": "Guardrail details", "type": "details" },
+    { "id": "invocation-logs", "targetId": "bedrock-invocation-logs", "serviceId": "amazon-bedrock", "title": "Invocation logs", "type": "logs" }
+  ],
+  "forms": [
+    { "id": "create-guardrail-form", "targetId": "guardrail-policy-form", "title": "Create guardrail", "fields": [
+      { "id": "name", "label": "Name", "type": "text", "required": true, "maxLength": 80 },
+      { "id": "policy", "label": "Content policy", "type": "select", "required": true, "options": [{ "value": "standard", "label": "Standard filtering" }, { "value": "strict", "label": "Strict filtering" }] }
+    ] },
+    { "id": "configure-guardrail-form", "targetId": "guardrail-configuration-form", "title": "Configure guardrail", "fields": [
+      { "id": "policy", "label": "Content policy", "type": "select", "required": true, "options": [{ "value": "standard", "label": "Standard filtering" }, { "value": "strict", "label": "Strict filtering" }] },
+      { "id": "block-output", "label": "Blocked response behavior", "type": "select", "required": true, "options": [{ "value": "off", "label": "Allow output" }, { "value": "on", "label": "Block unsafe output" }] }
+    ] },
+    { "id": "inspect-guardrail-form", "targetId": "guardrail-inspection-form", "title": "Inspect guardrail", "fields": [] },
+    { "id": "troubleshoot-guardrail-form", "targetId": "guardrail-troubleshooting-form", "title": "Troubleshoot invocation", "fields": [
+      { "id": "action", "label": "Corrective action", "type": "select", "required": true, "options": [{ "value": "none", "label": "Make no change" }, { "value": "attach-guardrail", "label": "Attach guardrail to invocation" }] }
+    ] }
+  ],
+  "operations": [
+    { "id": "create-guardrail", "targetId": "create-guardrail-action", "serviceId": "amazon-bedrock", "label": "Create guardrail", "description": "Create a versioned semantic guardrail resource.", "formId": "create-guardrail-form" },
+    { "id": "configure-guardrail", "targetId": "configure-guardrail-action", "serviceId": "amazon-bedrock", "label": "Configure guardrail", "description": "Apply strict filtering and blocked output behavior.", "formId": "configure-guardrail-form" },
+    { "id": "inspect-guardrail", "targetId": "inspect-guardrail-action", "serviceId": "amazon-bedrock", "label": "Inspect guardrail", "description": "Inspect observable configuration without mutation.", "formId": "inspect-guardrail-form" },
+    { "id": "troubleshoot-invocation", "targetId": "troubleshoot-invocation-action", "serviceId": "amazon-bedrock", "label": "Troubleshoot invocation", "description": "Repair an invocation that is not using the guardrail.", "formId": "troubleshoot-guardrail-form" }
+  ],
+  "checkpoints": [
+    { "id": "create", "title": "Create a guardrail", "objective": "Create a Bedrock guardrail named safe-output.", "operationId": "create-guardrail", "intent": "Establish a reusable output-safety boundary.", "instruction": "Open Guardrails and create safe-output with standard filtering.", "rationale": "A named guardrail creates an independently governed safety resource.", "expectedOutcome": "safe-output appears as an active guardrail.", "hints": ["Use the Guardrails resource list.", "Choose standard filtering for the initial policy."] },
+    { "id": "configure", "title": "Configure strict output safety", "objective": "Set strict filtering and block unsafe output.", "operationId": "configure-guardrail", "intent": "Strengthen deterministic output controls.", "instruction": "Edit safe-output, select strict filtering, and enable blocked output behavior.", "rationale": "The resource must enforce the intended safety outcome, not merely exist.", "expectedOutcome": "safe-output reports strict policy and output blocking on.", "hints": ["Inspect the current guardrail properties.", "Both policy and blocked response behavior need changes."] },
+    { "id": "inspect", "title": "Inspect observable state", "objective": "Verify the guardrail configuration from resource details.", "operationId": "inspect-guardrail", "intent": "Confirm deployment state without relying on a click path.", "instruction": "Inspect safe-output details and confirm its active strict configuration.", "rationale": "Operations should verify observable state rather than assume a save succeeded.", "expectedOutcome": "An inspection event confirms the active strict guardrail.", "hints": ["Use resource details, not edit controls."] },
+    { "id": "troubleshoot", "title": "Troubleshoot an unguarded invocation", "objective": "Attach safe-output to the model invocation and clear the warning.", "operationId": "troubleshoot-invocation", "intent": "Diagnose a configuration attachment failure.", "instruction": "Review invocation logs, then attach the existing guardrail.", "rationale": "A correct policy has no effect until the invocation references it.", "expectedOutcome": "The invocation becomes guarded and logs record the correction.", "hints": ["The guardrail exists, so inspect how it is attached.", "Choose the corrective action that attaches the policy."] }
+  ],
+  "initialState": {
+    "resources": [
+      { "id": "model-invocation", "targetId": "bedrock-model-invocation", "serviceId": "amazon-bedrock", "type": "model-invocation", "name": "support-assistant", "status": "warning", "properties": { "guardrail-attached": false }, "updatedAt": "2026-10-17T00:00:00.000Z" }
+    ],
+    "relationships": [],
+    "logs": [
+      { "id": "initial-warning", "level": "warning", "category": "guardrail", "message": "Invocation has no guardrail attached.", "occurredAt": "2026-10-17T00:00:00.000Z" }
+    ]
+  },
+  "debrief": {
+    "rootCause": "The model invocation was not attached to the configured guardrail.",
+    "prevention": "Validate both policy configuration and invocation attachment as observable semantic state.",
+    "explanation": "The simulator validates resources and relationships, not labels clicked or navigation order. The same intent can later run against a managed sandbox provider."
+  }
+}

@@ -64,3 +64,5 @@ export { learningFixtures } from "./fixtures";
 export type { LearningFixtures } from "./fixtures";
 export { commercialEntitlementSchema, parseCommercialEntitlement, parsePrivacyRequest, parsePrivacyRequestReceipt, parseReleaseAssignment, parseReleaseManifest, privacyRequestReceiptSchema, privacyRequestSchema, releaseAssignmentSchema, releaseManifestSchema } from "./commercial";
 export { mobileDiscoverySchema, parseMobileDiscovery } from "./mobile-discovery";
+export { parseThemeSettings, themeSettingsSchema } from "./theme";
+export { parseConsoleOperationResult, parseConsoleProgress, parseConsoleValidation, parseSemanticConsole, parseSemanticConsoleState, semanticConsoleSchema } from "./console";

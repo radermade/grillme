@@ -5,6 +5,7 @@ export type WorkspaceEvent =
   | { type: "OPEN_ASSESSMENT" }
   | { type: "OPEN_GRILL" }
   | { type: "OPEN_TRAINING" }
+  | { type: "OPEN_CONSOLE" }
   | { type: "OPEN_LAB" }
   | { type: "OPEN_READINESS" }
   | { type: "OPEN_MOCK" }
@@ -16,6 +17,7 @@ const navigation = {
   OPEN_ASSESSMENT: ".assessment",
   OPEN_GRILL: ".grill",
   OPEN_TRAINING: ".training",
+  OPEN_CONSOLE: ".console",
   OPEN_LAB: ".lab",
   OPEN_READINESS: ".readiness",
   OPEN_MOCK: ".mock",
@@ -34,6 +36,7 @@ export const createWorkspaceMachine = () => setup({
     assessment: {},
     grill: {},
     training: {},
+    console: {},
     lab: {},
     readiness: {},
     mock: {},

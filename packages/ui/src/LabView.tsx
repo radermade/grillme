@@ -5,6 +5,7 @@ import type { LabOperation } from "@grillme/domain";
 import { useUiRuntime } from "./runtime";
 import { AwsLabView } from "./AwsLabView";
 
+import { CommandBar } from "./primitives";
 const operations: Array<{ id: LabOperation; label: string }> = [
   { id: "set-retry-limit", label: "Set retry limit to two calls" },
   { id: "enable-strict-schema", label: "Enable strict output schema" },
@@ -37,6 +38,6 @@ export function LabView() {
     <fieldset><legend>Workspace operations</legend>{operations.map((operation) => <button className="secondary" key={operation.id} onClick={() => send({ type: "OPERATE", operation: operation.id })}>{operation.label}</button>)}</fieldset>
     {progress.lastValidation && <section className={`result ${progress.lastValidation.passed ? "strong" : "weak"}`} aria-live="polite"><h2>Server validation</h2>{progress.lastValidation.feedback.length ? <ul>{progress.lastValidation.feedback.map((message) => <li key={message}>{message}</li>)}</ul> : <p>All observable checks passed.</p>}</section>}
     <AwsLabView labSessionId={progress.sessionId} />
-    <div className="actions">{progress.hintLevel < checkpoint.hints.length && <button className="secondary" onClick={() => send({ type: "SHOW_HINT" })}>Show hint</button>}<button className="primary" disabled={progress.attempts >= lab.maxAttempts} onClick={() => send({ type: "VALIDATE" })}>Validate remotely</button><button className="secondary" onClick={() => send({ type: "STOP" })}>End lab</button></div>
+    <CommandBar label="Lab actions">{progress.hintLevel < checkpoint.hints.length && <button className="secondary" onClick={() => send({ type: "SHOW_HINT" })}>Show hint</button>}<button className="primary" disabled={progress.attempts >= lab.maxAttempts} onClick={() => send({ type: "VALIDATE" })}>Validate remotely</button><button className="secondary" onClick={() => send({ type: "STOP" })}>End lab</button></CommandBar>
   </main>;
 }

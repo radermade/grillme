@@ -71,6 +71,10 @@ Tasks are ordered by dependency. Checked items indicate that a draft artifact ex
 - [ ] 5.6 Conduct security and privacy review of high-risk threats and mitigations. (R9, R10)
 - [ ] 5.7 Approve per-session and per-user model and lab cost ceilings. (R10)
 - [ ] 5.8 Assign operational target owners and measurement methods. (R10)
+- [ ] 5.9 Obtain legal/terms, security, and privacy approval before automating AWS Console canary journeys. (R9, R10)
+- [ ] 5.10 Assign console compatibility, validator, crawler-incident, federation-session, and drift-release owners. (R9, R10)
+- [ ] 5.11 Approve crawler journey limits, artifact retention/redaction, and no-auto-publish controls. (R9, R10)
+- [ ] 5.12 Approve validator freshness, known-good/known-bad, inconclusive, withdrawal, and learner-mitigation policies. (R9, R10)
 
 ## 6. Record deferred provider decisions
 
@@ -80,6 +84,9 @@ Tasks are ordered by dependency. Checked items indicate that a draft artifact ex
 - [ ] 6.4 Decide analytics and error-reporting boundaries before customer telemetry. (R10)
 - [ ] 6.5 Decide sandbox runtime and AWS account-isolation model before labs. (R9, R10)
 - [ ] 6.6 Decide billing and entitlement provider before commercial release. (R9)
+- [ ] 6.7 Decide managed AWS account isolation and one-time Console federation approach before companion mode. (R9, R10)
+- [ ] 6.8 Decide console canary runner, workload identity, artifact storage, retention, and alerting providers before crawler implementation. (R9, R10)
+- [ ] 6.9 Decide validator registry, scheduler, live-canary accounts, and incident integration before production validator health gates. (R9, R10)
 
 Each selection requires an architecture decision recording portability, privacy, security, cost, migration, and exit implications. These provider tasks do not all block Phase 1.
 
