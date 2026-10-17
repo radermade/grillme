@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "aws-aip-c01",
+  "version": "0.1.0",
+  "title": "AWS Generative AI Developer - Professional",
+  "description": "A practical preparation path for production-oriented generative AI development on AWS.",
+  "locale": "en-US",
+  "sources": [{
+    "title": "AWS Certified Generative AI Developer - Professional Exam Guide",
+    "url": "https://docs.aws.amazon.com/aws-certification/latest/examguides/ai-professional-01.html",
+    "retrievedAt": "2026-10-16"
+  }],
+  "modules": [{
+    "id": "structured-output",
+    "title": "Reliable model integration",
+    "lessons": [{
+      "id": "model-output-is-input",
+      "title": "Model output is untrusted input",
+      "summary": "Separate parsing, validation, safety, and authority boundaries.",
+      "blocks": [
+        { "type": "text", "body": "A successful model call does not produce trusted application data. Parse output, validate its schema, apply safety policy, and keep authorization deterministic." },
+        { "type": "callout", "tone": "warning", "title": "Never delegate authority", "body": "A structurally valid model response cannot grant permissions, choose unrestricted tools, or bypass policy." },
+        { "type": "code", "language": "typescript", "code": "const result = OutputSchema.safeParse(JSON.parse(raw));\nif (!result.success) throw new OutputRejectedError();" }
+      ],
+      "activities": [{ "id": "reflect-boundaries", "type": "reflection", "title": "Identify each trust boundary" }]
+    }, {
+      "id": "bounded-recovery",
+      "title": "Bound retries and failure",
+      "summary": "Keep recovery within latency, reliability, and cost limits.",
+      "blocks": [
+        { "type": "text", "body": "Retry only failures likely to recover, use a strict attempt limit, and return an explicit terminal result when the limit is exhausted." },
+        { "type": "diagram", "title": "Bounded recovery", "description": "A request is validated after each model call and stops after success or the final allowed failure.", "nodes": ["Request", "Model call", "Validate", "Retry once", "Success or terminal failure"] }
+      ],
+      "activities": [{ "id": "retry-check", "type": "knowledge-check", "title": "Defend a retry policy" }]
+    }, {
+      "id": "observe-without-leaking",
+      "title": "Observe without leaking",
+      "summary": "Collect useful operational signals without raw sensitive content.",
+      "blocks": [
+        { "type": "text", "body": "Track latency, attempts, failure category, token use, and terminal outcome. Avoid prompts, raw output, secrets, and retrieved sensitive data by default." },
+        { "type": "callout", "tone": "info", "title": "Useful evidence", "body": "Operational metadata should answer what failed and where without reproducing learner or model content." }
+      ],
+      "activities": [{ "id": "telemetry-lab", "type": "lab", "title": "Repair an unsafe telemetry configuration" }]
+    }]
+  }]
+}

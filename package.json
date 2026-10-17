@@ -1,17 +1,36 @@
 {
   "name": "grillme",
   "private": true,
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
+    "desktop:dev": "vite --config apps/desktop/vite.config.ts",
+    "desktop:build": "vite build --config apps/desktop/vite.config.ts",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build --no-bundle",
+    "tauri:bundle": "tauri build",
+    "tauri:bundle:macos": "tauri build --bundles app,dmg",
+    "tauri:bundle:windows": "tauri build --bundles msi,nsis",
+    "typecheck": "tsc --noEmit",
+    "test": "node tests/run.mjs",
     "prototype:dev": "vite prototypes/learning-loop/web",
     "prototype:build": "vite build prototypes/learning-loop/web",
-    "typecheck": "tsc --noEmit",
     "test:prototype": "node --test prototypes/learning-loop/exercise/validator.test.mjs",
     "test:prototype:reference": "node --test prototypes/learning-loop/exercise/validator.reference.test.mjs"
   },
   "dependencies": {
-    "xstate": "5.33.2"
+    "@tauri-apps/api": "2.12.4",
+    "@tauri-apps/plugin-opener": "2.7.2",
+    "@xstate/react": "6.1.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "xstate": "5.33.2",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "2.12.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "4.7.0",
     "typescript": "5.9.3",
     "vite": "6.4.4"
   }

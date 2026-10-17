@@ -9,7 +9,15 @@
     "exactOptionalPropertyTypes": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "paths": {
+      "@grillme/domain": ["./packages/domain/src/index.ts"],
+      "@grillme/content": ["./packages/content/src/index.ts"],
+      "@grillme/machines": ["./packages/machines/src/index.ts"],
+      "@grillme/platform": ["./packages/platform/src/index.ts"]
+    }
   },
-  "include": ["prototypes/learning-loop/web/src/**/*.ts"]
+  "include": ["apps/desktop/src/**/*.ts", "apps/desktop/src/**/*.tsx", "packages/**/*.ts", "prototypes/learning-loop/web/src/**/*.ts"]
 }

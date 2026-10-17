@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "structured-output-baseline",
+  "version": "1.0.0",
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "title": "Reliable model integration baseline",
+  "description": "Assess how you validate, secure, recover, and observe structured model output.",
+  "skills": [
+    {
+      "id": "structured-output",
+      "title": "Structured output validation",
+      "remediation": "Review the distinction between parsing JSON and validating its runtime shape.",
+      "reviewPrompt": "After JSON parsing succeeds, what must happen before model output becomes application data?",
+      "reviewAnswer": "Validate the runtime schema, field constraints, size, and destination safety before use."
+    },
+    {
+      "id": "retry-reliability",
+      "title": "Bounded recovery",
+      "remediation": "Review retry eligibility, attempt limits, and explicit terminal failure.",
+      "reviewPrompt": "What keeps model-output recovery from becoming a reliability and cost failure?",
+      "reviewAnswer": "Retry only recoverable failures, cap total attempts, and return a typed terminal failure when exhausted."
+    },
+    {
+      "id": "output-safety",
+      "title": "Output safety and authority",
+      "remediation": "Review safety checks and why models cannot authorize privileged actions.",
+      "reviewPrompt": "Which decisions must remain deterministic even when model output is structurally valid?",
+      "reviewAnswer": "Safety policy, authorization, and tool permissions remain deterministic and outside the model."
+    },
+    {
+      "id": "safe-observability",
+      "title": "Safe observability",
+      "remediation": "Review useful operational metadata and sensitive fields that should not be logged.",
+      "reviewPrompt": "Which signals diagnose output failures without recording model content?",
+      "reviewAnswer": "Track latency, attempts, failure category, token use, and terminal outcome without raw prompts or output."
+    }
+  ],
+  "activities": [
+    {
+      "id": "parse-versus-validate",
+      "type": "single-choice",
+      "prompt": "A model response parses as JSON. What should the application do next?",
+      "skillIds": ["structured-output"],
+      "rationale": "Parsing establishes JSON syntax only. Runtime schema and field constraints still require deterministic validation.",
+      "choices": [
+        { "id": "render", "label": "Render every returned field" },
+        { "id": "validate", "label": "Validate the runtime schema and constraints" },
+        { "id": "trust", "label": "Ask the model whether its response is valid" }
+      ],
+      "correctOptionId": "validate"
+    },
+    {
+      "id": "deterministic-controls",
+      "type": "multiple-choice",
+      "prompt": "Which controls must remain deterministic? Select all that apply.",
+      "skillIds": ["structured-output", "output-safety"],
+      "rationale": "Schema validation, safety policy, and authorization cannot be delegated to model judgment.",
+      "choices": [
+        { "id": "schema", "label": "Runtime schema validation" },
+        { "id": "safety", "label": "Output safety policy" },
+        { "id": "authorization", "label": "Authorization and tool permissions" },
+        { "id": "wording", "label": "The exact wording of a helpful explanation" }
+      ],
+      "correctOptionIds": ["schema", "safety", "authorization"]
+    },
+    {
+      "id": "safe-output-flow",
+      "type": "ordering",
+      "prompt": "Put the output handling flow in order.",
+      "skillIds": ["structured-output", "output-safety"],
+      "rationale": "Parse first, validate structure second, apply safety and policy controls third, then use the value.",
+      "items": [
+        { "id": "use", "label": "Use the validated value" },
+        { "id": "policy", "label": "Apply safety and policy controls" },
+        { "id": "parse", "label": "Parse the response" },
+        { "id": "validate", "label": "Validate schema and constraints" }
+      ],
+      "correctOrder": ["parse", "validate", "policy", "use"]
+    },
+    {
+      "id": "bounded-retry",
+      "type": "short-text",
+      "prompt": "In one or two sentences, describe a safe retry policy for invalid model output.",
+      "skillIds": ["retry-reliability"],
+      "rationale": "A safe policy limits total attempts and returns an explicit terminal failure when recovery is exhausted.",
+      "requiredConcepts": [
+        { "label": "bounded attempts", "terms": ["maximum attempts", "max attempts", "attempt limit", "bounded retries", "two attempts"] },
+        { "label": "terminal failure", "terms": ["terminal failure", "typed error", "stop retrying", "return an error", "fail"] }
+      ]
+    },
+    {
+      "id": "safe-telemetry",
+      "type": "short-text",
+      "prompt": "Name useful failure signals and one category of data that should not be logged by default.",
+      "skillIds": ["safe-observability"],
+      "rationale": "Operational metadata can diagnose behavior without storing prompts, raw output, secrets, or sensitive retrieved data.",
+      "requiredConcepts": [
+        { "label": "operational signal", "terms": ["latency", "attempt", "failure category", "token", "outcome"] },
+        { "label": "sensitive data exclusion", "terms": ["raw output", "prompt", "secret", "sensitive data", "credentials"] }
+      ]
+    }
+  ]
+}

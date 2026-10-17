@@ -95,6 +95,8 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 
 ## Phase 1: Runnable desktop learning shell
 
+**Status:** Locally complete: engineering, native crash recovery, high-contrast hardening, and unsigned macOS app/DMG packaging pass. Code signing, notarization, Windows-runner packaging, and human assistive-technology review remain external gates. See [`phase-1/requirements.md`](phase-1/requirements.md), [`phase-1/design.md`](phase-1/design.md), and [`phase-1/tasks.md`](phase-1/tasks.md).
+
 **Goal:** Ship a signed desktop build that can load, navigate, and resume a small versioned course without requiring privileged cloud functionality.
 
 ### Slice 1.1: Monorepo and desktop composition root
@@ -122,6 +124,8 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 **Exit criteria:** A learner can open, navigate, close, and resume the sample module; invalid content fails safely with an actionable error.
 
 ## Phase 2: Closed-loop assessment
+
+**Status:** Locally complete with runtime-validated persistence, guarded machine inputs, deterministic assessment/review workflows, and 15 passing project tests; manual accessibility review pending. See [`phase-2/requirements.md`](phase-2/requirements.md), [`phase-2/design.md`](phase-2/design.md), and [`phase-2/tasks.md`](phase-2/tasks.md).
 
 **Goal:** Deliver a complete, deterministic assessment and remediation loop before introducing generative evaluation.
 
