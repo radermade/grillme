@@ -29,6 +29,7 @@ export type LabSession = {
   labId: string;
   labVersion: string;
   status: "provisioning" | "ready" | "stopping" | "expired" | "cleaned" | "failed";
+  provenance: import("./validator").ValidationProvenance & { compatibilityId: string; compatibilityVersion: string };
   terminalPath: string;
   editorPath: string;
   createdAt: string;
@@ -42,12 +43,6 @@ export type LabOperation =
   | "sanitize-telemetry"
   | "reset-workspace";
 
-export type LabValidation = {
-  passed: boolean;
-  failedCheckIds: string[];
-  feedback: string[];
-};
-
 export type LabProgress = {
   schemaVersion: 1;
   labId: string;
@@ -56,8 +51,9 @@ export type LabProgress = {
   checkpointIndex: number;
   hintLevel: number;
   attempts: number;
+  validationRequests: number;
   completedCheckpointIds: string[];
-  lastValidation: LabValidation | null;
+  lastValidation: import("./validator").LabValidation | null;
   expiresAt: string;
   updatedAt: string;
 };
@@ -74,6 +70,8 @@ export type LabEvidenceEvent = {
   sessionId: string;
   checkpointId: string | null;
   passed: boolean;
+  validatorId: string;
+  validatorVersion: string;
   attemptNumber: number;
   hintsUsed: number;
   occurredAt: string;

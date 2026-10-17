@@ -1,0 +1,98 @@
+export type ValidationStatus = "passed" | "failed" | "inconclusive";
+export type ValidatorProvider = "simulator" | "controlled-sandbox" | "managed-aws";
+export type ValidationProvenance = {
+  validatorId: string;
+  validatorVersion: string;
+  bundleId: string;
+  bundleVersion: string;
+  mappingId: string;
+  mappingVersion: string;
+  presentationMappingVersion: string;
+  templateId: string;
+  templateVersion: string;
+  region: string;
+  provider: ValidatorProvider;
+  providerAdapterVersion: string;
+};
+export type ValidationEvidence = { checkId: string; observed: string; expected: string | null };
+export type LabValidation = {
+  schemaVersion: 1;
+  status: ValidationStatus;
+  provenance: ValidationProvenance;
+  failedCheckIds: string[];
+  feedback: string[];
+  evidence: ValidationEvidence[];
+  inconclusiveReason: "service-unavailable" | "permission-denied" | "region-unsupported" | "schema-drift" | "stale-health" | "disabled-validator" | "unavailable-evidence" | null;
+  observedAt: string;
+};
+export type CompatibilityEntry = {
+  schemaVersion: 1;
+  id: string;
+  version: string;
+  labId: string;
+  labVersion: string;
+  scenarioId: string | null;
+  scenarioVersion: string | null;
+  semanticMappingVersion: string;
+  presentationMappingVersion: string;
+  templateId: string;
+  templateVersion: string;
+  sdkApiVersion: string;
+  validatorBundleId: string;
+  validatorBundleVersion: string;
+  region: string;
+  provider: ValidatorProvider;
+  providerAdapterVersion: string;
+  status: "active" | "degraded-reviewed" | "withdrawn";
+  knownLimitations: string[];
+};
+export type ValidatorFixture = {
+  id: string;
+  capability: "bedrock" | "iam" | "sandbox-lifecycle" | "cleanup";
+  kind: "known-good" | "known-bad" | "unsupported";
+  checkpointId: string;
+  observedState: Record<string, boolean>;
+  expectedState: Record<string, boolean>;
+  expectedStatus: ValidationStatus;
+  expectedFailedCheckIds: string[];
+};
+export type ValidatorBundle = {
+  schemaVersion: 1;
+  id: string;
+  version: string;
+  validatorId: string;
+  validatorVersion: string;
+  labId: string;
+  labVersion: string;
+  status: "active" | "withdrawn";
+  checks: Record<string, { id: string; operation: import("./lab").LabOperation; expected: boolean; message: string }[]>;
+  fixtures: ValidatorFixture[];
+};
+export type CapabilityProbe = {
+  id: string;
+  type: "service" | "model" | "region" | "inspector-permission" | "template" | "cost-policy";
+  status: "passed" | "failed" | "inconclusive";
+  observedAt: string;
+  expiresAt: string;
+  reason: string | null;
+};
+export type ValidatorHealth = {
+  schemaVersion: 1;
+  compatibilityId: string;
+  compatibilityVersion: string;
+  status: "healthy" | "degraded" | "drift-suspected" | "disabled";
+  fixtureResults: { fixtureId: string; expectedStatus: ValidationStatus; actualStatus: ValidationStatus; matched: boolean }[];
+  probes: CapabilityProbe[];
+  checkedAt: string;
+  expiresAt: string;
+  reviewedDegradedPolicyId: string | null;
+};
+export type ValidatorCanaryIncident = {
+  schemaVersion: 1;
+  id: string;
+  compatibilityId: string;
+  healthStatus: ValidatorHealth["status"];
+  reason: "known-good-failed" | "known-bad-passed" | "unsupported-passed" | "probe-failed" | "provider-divergence" | "health-stale";
+  status: "open" | "acknowledged" | "resolved";
+  createdAt: string;
+};

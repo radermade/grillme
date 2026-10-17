@@ -44,7 +44,7 @@ export function createDeterministicConsolePort(now: () => string): ConsolePort {
     },
     async validate(scenarioId, scenarioVersion, checkpointId, state) {
       if (scenarioId !== "bedrock-guardrail-console" || scenarioVersion !== "1.0.0") throw new Error("CONSOLE_SCENARIO_UNSUPPORTED");
-      return validateSemanticConsoleState(checkpointId, state);
+      return validateSemanticConsoleState(checkpointId, state, now());
     },
   };
 }

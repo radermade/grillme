@@ -418,7 +418,7 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 13: AWS Console drift crawler
 
-**Status:** Planned; legal, security, privacy, and AWS-usage approval required before automation. See [`phase-13/requirements.md`](phase-13/requirements.md), [`phase-13/design.md`](phase-13/design.md), and [`phase-13/tasks.md`](phase-13/tasks.md).
+**Status:** Local controlled foundation complete; real automation remains blocked on legal, security, privacy, AWS-usage, ownership, and infrastructure approval. See [`phase-13/requirements.md`](phase-13/requirements.md), [`phase-13/design.md`](phase-13/design.md), and [`phase-13/tasks.md`](phase-13/tasks.md).
 
 **Goal:** Detect presentation and navigation drift through a separate, bounded internal console-canary process.
 
@@ -441,7 +441,7 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 14: Validator compatibility and canaries
 
-**Status:** Planned; depends on semantic simulation and deployed canary infrastructure. See [`phase-14/requirements.md`](phase-14/requirements.md), [`phase-14/design.md`](phase-14/design.md), and [`phase-14/tasks.md`](phase-14/tasks.md).
+**Status:** Local versioned-validation, compatibility, and simulator-canary foundation complete; scheduled live canaries, alerts, and operator exercises remain pending. See [`phase-14/requirements.md`](phase-14/requirements.md), [`phase-14/design.md`](phase-14/design.md), and [`phase-14/tasks.md`](phase-14/tasks.md).
 
 **Goal:** Prevent AWS/API drift from becoming false learner failures or false passes.
 

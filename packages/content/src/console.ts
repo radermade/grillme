@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { labValidationSchema } from "./validator";
 import type { ConsoleOperationResult, ConsoleProgress, ConsoleValidation, SemanticConsoleDefinition, SemanticConsoleState } from "@grillme/domain";
 
 const id = z.string().min(1).max(100).regex(/^[a-z0-9-]+$/);
@@ -41,7 +42,7 @@ export const semanticConsoleSchema = z.object({
   if (!unique(resourceIds) || console.initialState.resources.some(({ serviceId }) => !serviceIds.includes(serviceId)) || console.initialState.relationships.some(({ from, to }) => !resourceIds.includes(from) || !resourceIds.includes(to))) context.addIssue({ code: "custom", message: "Initial state contains invalid resource references." });
 });
 const progressSchema = z.object({ schemaVersion: z.literal(1), scenarioId: id, scenarioVersion: version, simulatorVersion: version, semanticVersion: version, awsVersion: version, presentationVersion: version, mappingVerifiedAt: z.iso.date(), sessionId: id, mode: z.enum(["walkthrough", "practice", "challenge"]), checkpointIndex: z.number().int().min(0).max(30), state, checkpointStart: state, hintLevel: z.number().int().min(0).max(5), resets: z.number().int().min(0).max(1_000), attempts: z.number().int().min(0).max(1_000), completedCheckpointIds: z.array(id).max(30), updatedAt: z.iso.datetime({ offset: true }) }).strict();
-const validationSchema = z.object({ status: z.enum(["passed", "failed", "inconclusive"]), passedCheckIds: z.array(id).max(30), failedCheckIds: z.array(id).max(30), feedback: z.array(z.string().min(1).max(500)).max(30) }).strict();
+const validationSchema = labValidationSchema.extend({ passedCheckIds: z.array(id).max(30) }).strict();
 const operationResultSchema = z.object({ schemaVersion: z.literal(1), operationId: id, state, changedResourceIds: z.array(id).max(30) }).strict();
 export const parseSemanticConsole = (input: unknown): SemanticConsoleDefinition => semanticConsoleSchema.parse(input) as SemanticConsoleDefinition;
 export const parseSemanticConsoleState = (input: unknown): SemanticConsoleState => state.parse(input) as SemanticConsoleState;

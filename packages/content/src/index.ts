@@ -52,7 +52,7 @@ export {
   parseSyncPushResult,
   parseSummary,
 } from "./sync";
-export { labEvidenceSchema, labProgressSchema, labSchema, labSessionSchema, parseLab, parseLabEvidence, parseLabProgress, parseLabSession, parseLabValidation } from "./lab";
+export { labEvidenceSchema, labProgressSchema, labSchema, labSessionSchema, parseLab, parseLabEvidence, parseLabProgress, parseLabSession } from "./lab";
 export { awsCredentialLeaseSchema, awsLabOperationSchema, awsLabPolicySchema, awsOperationReceiptSchema, parseAwsCredentialLease, parseAwsLabOperation, parseAwsLabPolicy, parseAwsOperationReceipt } from "./aws-lab";
 export { parseReadinessEvidence, parseReadinessRules, readinessEvidenceSchema, readinessRuleSetSchema } from "./readiness";
 export { mockEvidenceSchema, mockProgressSchema, mockSchema, parseMock, parseMockEvidence, parseMockProgress } from "./mock";
@@ -66,3 +66,5 @@ export { commercialEntitlementSchema, parseCommercialEntitlement, parsePrivacyRe
 export { mobileDiscoverySchema, parseMobileDiscovery } from "./mobile-discovery";
 export { parseThemeSettings, themeSettingsSchema } from "./theme";
 export { parseConsoleOperationResult, parseConsoleProgress, parseConsoleValidation, parseSemanticConsole, parseSemanticConsoleState, semanticConsoleSchema } from "./console";
+export { consoleDriftBaselineSchema, consoleDriftJourneySchema, consoleDriftObservationSchema, consoleDriftRecordSchema, consoleDriftReviewSchema, consoleDriftSuspicionSchema, consoleMappingReleaseInputSchema, consoleMappingReleaseSchema, parseConsoleDriftBaseline, parseConsoleDriftJourney, parseConsoleDriftObservation, parseConsoleDriftRecord, parseConsoleDriftReview, parseConsoleDriftSuspicion, parseConsoleMappingRelease, parseConsoleMappingReleaseInput } from "./console-drift";
+export { compatibilityEntrySchema, labValidationSchema, parseCompatibilityEntry, parseLabValidation, parseValidatorBundle, parseValidatorHealth, validationProvenanceSchema, validatorBundleSchema, validatorHealthSchema } from "./validator";

@@ -41,14 +41,15 @@ export function createConsoleSessionMachine(source: unknown, provider: ConsolePo
         const item = checkpoint(input.context); const progress = input.context.progress;
         if (!item || !progress) throw new Error("Checkpoint unavailable.");
         const validation = parseConsoleValidation(await provider.validate(definition.id, definition.version, item.id, progress.state));
-        const next = { ...progress, attempts: progress.attempts + 1, completedCheckpointIds: validation.status === "passed" ? [...new Set([...progress.completedCheckpointIds, item.id])] : progress.completedCheckpointIds, updatedAt: ports.clock.now() };
+        const consumesAttempt = validation.status !== "inconclusive";
+        const next = { ...progress, attempts: progress.attempts + (consumesAttempt ? 1 : 0), completedCheckpointIds: validation.status === "passed" ? [...new Set([...progress.completedCheckpointIds, item.id])] : progress.completedCheckpointIds, updatedAt: ports.clock.now() };
         return { validation, progress: next };
       }),
       persistValidation: fromPromise<void, { context: Context }>(async ({ input }) => {
         const { progress, validation } = input.context; const item = checkpoint(input.context);
         if (!progress || !validation || !item) throw new Error("Validation evidence unavailable.");
         const id = ports.ids.create();
-        const evidence: ConsoleEvidenceEvent = { schemaVersion: 1, id, idempotencyKey: id, type: "console.validated", courseId: definition.courseId, courseVersion: definition.courseVersion, scenarioId: definition.id, scenarioVersion: definition.version, simulatorVersion: definition.simulatorVersion, semanticVersion: definition.mapping.semanticVersion, awsVersion: definition.mapping.awsVersion, presentationVersion: definition.mapping.presentationVersion, mappingVerifiedAt: definition.mapping.lastVerifiedAt, sessionId: progress.sessionId, mode: progress.mode, checkpointId: item.id, status: validation.status, passedCheckIds: validation.passedCheckIds, failedCheckIds: validation.failedCheckIds, hintsUsed: progress.hintLevel, resets: progress.resets, attemptNumber: progress.attempts, occurredAt: ports.clock.now() };
+        const evidence: ConsoleEvidenceEvent = { schemaVersion: 1, id, idempotencyKey: id, type: "console.validated", courseId: definition.courseId, courseVersion: definition.courseVersion, scenarioId: definition.id, scenarioVersion: definition.version, simulatorVersion: definition.simulatorVersion, semanticVersion: definition.mapping.semanticVersion, awsVersion: definition.mapping.awsVersion, presentationVersion: definition.mapping.presentationVersion, mappingVerifiedAt: definition.mapping.lastVerifiedAt, sessionId: progress.sessionId, mode: progress.mode, checkpointId: item.id, status: validation.status, validatorId: validation.provenance.validatorId, validatorVersion: validation.provenance.validatorVersion, passedCheckIds: validation.passedCheckIds, failedCheckIds: validation.failedCheckIds, hintsUsed: progress.hintLevel, resets: progress.resets, attemptNumber: progress.attempts, occurredAt: ports.clock.now() };
         await ports.storage.set(progressKey(definition, progress.mode), progress);
         await ports.storage.append(`console-events:${definition.id}:${definition.version}`, evidence);
       }),
@@ -72,8 +73,31 @@ export function createConsoleSessionMachine(source: unknown, provider: ConsolePo
       hinted: assign(({ context }) => context.progress ? { progress: { ...context.progress, hintLevel: context.progress.hintLevel + 1, updatedAt: ports.clock.now() } } : {}),
       validated: assign(({ event }) => ({ validation: output<Validated>(event).validation, progress: output<Validated>(event).progress, error: null })),
       validationUnavailable: assign(({ context }) => ({
-        validation: { status: "inconclusive" as const, passedCheckIds: [], failedCheckIds: [], feedback: ["Validation is temporarily unavailable. Your work was not marked incorrect."] },
-        progress: context.progress ? { ...context.progress, attempts: context.progress.attempts + 1, updatedAt: ports.clock.now() } : null,
+        validation: {
+          schemaVersion: 1 as const,
+          status: "inconclusive" as const,
+          provenance: {
+            validatorId: "bedrock-semantic-console",
+            validatorVersion: "1.0.0",
+            bundleId: "bedrock-console-bundle",
+            bundleVersion: "1.0.0",
+            mappingId: definition.id,
+            mappingVersion: definition.mapping.semanticVersion,
+            presentationMappingVersion: definition.mapping.presentationVersion,
+            templateId: "semantic-console-state",
+            templateVersion: definition.simulatorVersion,
+            region: "us-east-1",
+            provider: "simulator" as const,
+            providerAdapterVersion: definition.simulatorVersion,
+          },
+          passedCheckIds: [],
+          failedCheckIds: [],
+          feedback: ["Validation is temporarily unavailable. Your work was not marked incorrect."],
+          evidence: [],
+          inconclusiveReason: "service-unavailable" as const,
+          observedAt: ports.clock.now(),
+        },
+        progress: context.progress ? { ...context.progress, updatedAt: ports.clock.now() } : null,
         error: { code: "UNKNOWN" as const, message: "Validation is temporarily unavailable." },
       })),
       reset: assign(({ context }) => context.progress ? { progress: { ...context.progress, state: clone(context.progress.checkpointStart), hintLevel: 0, resets: context.progress.resets + 1, updatedAt: ports.clock.now() }, validation: null, draft: initialDraft(form(context)?.fields ?? []) } : {}),

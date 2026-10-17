@@ -7,6 +7,7 @@
     "@grillme/content": "*",
     "@grillme/domain": "*",
     "@grillme/evaluation": "*",
+    "xstate": "5.33.2",
     "zod": "4.6.7"
   }
 }

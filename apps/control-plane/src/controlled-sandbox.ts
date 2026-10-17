@@ -1,4 +1,4 @@
-import type { LabOperation, LabValidation } from "@grillme/domain";
+import type { LabOperation, LabSession, LabValidation } from "@grillme/domain";
 import type { PrivateLabDefinition, SandboxProvider } from "./lab-contracts";
 
 export const createControlledSandboxProvider = (): SandboxProvider => {
@@ -11,11 +11,12 @@ export const createControlledSandboxProvider = (): SandboxProvider => {
       if (!state) throw new Error("Environment unavailable.");
       if (operation === "reset-workspace") state.clear(); else state.add(operation);
     },
-    async validate(environmentId, checks: PrivateLabDefinition["validators"][string]): Promise<LabValidation> {
+    async validate(environmentId, checks: PrivateLabDefinition["validators"][string], provenance: LabSession["provenance"], observedAt: string): Promise<LabValidation> {
       const state = environments.get(environmentId);
       if (!state) throw new Error("Environment unavailable.");
       const failed = checks.filter(({ operation, expected }) => state.has(operation) !== expected);
-      return { passed: failed.length === 0, failedCheckIds: failed.map(({ id }) => id), feedback: failed.map(({ message }) => message) };
+      const { compatibilityId: _, compatibilityVersion: __, ...validationProvenance } = provenance;
+      return { schemaVersion: 1, status: failed.length === 0 ? "passed" : "failed", provenance: validationProvenance, failedCheckIds: failed.map(({ id }) => id), feedback: failed.map(({ message }) => message), evidence: checks.map(({ id, operation, expected }) => ({ checkId: id, observed: String(state.has(operation)), expected: String(expected) })), inconclusiveReason: null, observedAt };
     },
     async destroy(environmentId) { environments.delete(environmentId); },
   };

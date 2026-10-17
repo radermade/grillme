@@ -2,7 +2,7 @@ import type { LabDefinition, LabOperation, LabSession, LabValidation } from "@gr
 import type { LabProvisionResponse, LabServiceDependencies, LabSessionRecord } from "./lab-contracts";
 
 export class LabServiceError extends Error {
-  constructor(readonly code: "INVALID_REQUEST" | "UNAUTHORIZED" | "FORBIDDEN" | "QUOTA_EXCEEDED" | "NOT_FOUND" | "EXPIRED", message: string) { super(message); this.name = "LabServiceError"; }
+  constructor(readonly code: "INVALID_REQUEST" | "UNAUTHORIZED" | "FORBIDDEN" | "QUOTA_EXCEEDED" | "NOT_FOUND" | "EXPIRED" | "UNAVAILABLE", message: string) { super(message); this.name = "LabServiceError"; }
 }
 const addMinutes = (timestamp: string, minutes: number) => new Date(Date.parse(timestamp) + minutes * 60_000).toISOString();
 const publicDefinition = (definition: Awaited<ReturnType<LabServiceDependencies["definitions"]["find"]>>): LabDefinition | null => {
@@ -46,6 +46,9 @@ export const createLabService = (deps: LabServiceDependencies) => {
       const definition = await deps.definitions.find(labId, labVersion);
       if (!definition) throw new LabServiceError("NOT_FOUND", "Lab is unavailable.");
       if (!await deps.entitlements.authorize({ userId: auth.userId, courseId: definition.courseId, courseVersion: definition.courseVersion, feature: "sandbox-lab" })) throw new LabServiceError("FORBIDDEN", "Lab access is unavailable.");
+      let resolved: Awaited<ReturnType<LabServiceDependencies["compatibility"]["resolve"]>>;
+      try { resolved = await deps.compatibility.resolve(labId, labVersion); }
+      catch { throw new LabServiceError("UNAVAILABLE", "Lab compatibility is not currently healthy."); }
       if ((await deps.sessions.listActive()).some(({ userId, stopped }) => userId === auth.userId && !stopped)) throw new LabServiceError("QUOTA_EXCEEDED", "Only one sandbox lab can run at a time.");
       const sessionId = deps.ids.create();
       if (!await deps.quota.reserve({ userId: auth.userId, sessionId, costUnits: definition.estimatedCostUnits, maxDurationMinutes: definition.maxDurationMinutes })) throw new LabServiceError("QUOTA_EXCEEDED", "Lab quota is exhausted.");
@@ -55,8 +58,9 @@ export const createLabService = (deps: LabServiceDependencies) => {
       try {
         const provisioned = await deps.provider.provision({ sessionId, imageDigest: definition.imageDigest, expiresAt });
         environmentId = provisioned.environmentId;
-        const session: LabSession = { schemaVersion: 1, id: sessionId, labId, labVersion, status: "ready", terminalPath: `/labs/${sessionId}/terminal`, editorPath: `/labs/${sessionId}/editor`, createdAt, expiresAt };
-        await deps.sessions.put({ session, userId: auth.userId, environmentId: provisioned.environmentId, stopped: false, validationAttempts: {}, validationResults: {} });
+        const provenance: LabSession["provenance"] = { validatorId: resolved.bundle.validatorId, validatorVersion: resolved.bundle.validatorVersion, bundleId: resolved.bundle.id, bundleVersion: resolved.bundle.version, mappingId: resolved.compatibility.id, mappingVersion: resolved.compatibility.semanticMappingVersion, presentationMappingVersion: resolved.compatibility.presentationMappingVersion, templateId: resolved.compatibility.templateId, templateVersion: resolved.compatibility.templateVersion, region: resolved.compatibility.region, provider: resolved.compatibility.provider, providerAdapterVersion: resolved.compatibility.providerAdapterVersion, compatibilityId: resolved.compatibility.id, compatibilityVersion: resolved.compatibility.version };
+        const session: LabSession = { schemaVersion: 1, id: sessionId, labId, labVersion, status: "ready", provenance, terminalPath: `/labs/${sessionId}/terminal`, editorPath: `/labs/${sessionId}/editor`, createdAt, expiresAt };
+        await deps.sessions.put({ session, userId: auth.userId, environmentId: provisioned.environmentId, stopped: false, validatorBundle: resolved.bundle, validationAttempts: {}, validationResults: {} });
         await deps.audit.record({ sessionId, userId: auth.userId, labId, operation: "provision", outcome: "ready", occurredAt: createdAt });
         return { session, connectionTicket: provisioned.connectionTicket };
       } catch (error) {
@@ -81,13 +85,18 @@ export const createLabService = (deps: LabServiceDependencies) => {
       const cached = record.validationResults[attemptId];
       if (cached) return cached;
       const definition = await deps.definitions.find(record.session.labId, record.session.labVersion);
-      const checks = definition?.validators[checkpointId];
+      const checks = record.validatorBundle.checks[checkpointId];
       if (!definition || !checks || !attemptId || attemptId.length > 300) throw new LabServiceError("INVALID_REQUEST", "Checkpoint is invalid.");
       const attempts = record.validationAttempts[checkpointId] ?? 0;
       if (attempts >= definition.maxAttempts) throw new LabServiceError("QUOTA_EXCEEDED", "Checkpoint attempt limit reached.");
-      const result = await deps.provider.validate(record.environmentId, checks);
-      await deps.sessions.put({ ...record, validationAttempts: { ...record.validationAttempts, [checkpointId]: attempts + 1 }, validationResults: { ...record.validationResults, [attemptId]: result } });
-      await deps.audit.record({ sessionId, userId: record.userId, labId: record.session.labId, operation: "validate", outcome: result.passed ? "passed" : "failed", occurredAt: deps.clock.now() });
+      let result: LabValidation;
+      try { result = await deps.provider.validate(record.environmentId, checks, record.session.provenance, deps.clock.now()); }
+      catch {
+        const { compatibilityId: _, compatibilityVersion: __, ...validationProvenance } = record.session.provenance;
+        result = { schemaVersion: 1, status: "inconclusive", provenance: validationProvenance, failedCheckIds: [], feedback: ["Validation infrastructure is temporarily unavailable. Your work was not marked incorrect."], evidence: [], inconclusiveReason: "service-unavailable", observedAt: deps.clock.now() }; }
+      const nextAttempts = result.status === "inconclusive" ? attempts : attempts + 1;
+      await deps.sessions.put({ ...record, validationAttempts: { ...record.validationAttempts, [checkpointId]: nextAttempts }, validationResults: { ...record.validationResults, [attemptId]: result } });
+      await deps.audit.record({ sessionId, userId: record.userId, labId: record.session.labId, operation: "validate", outcome: result.status, occurredAt: deps.clock.now() });
       return result;
     },
     async stop(authorization: string, sessionId: string): Promise<LabSession> {

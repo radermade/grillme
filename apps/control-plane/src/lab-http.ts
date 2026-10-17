@@ -11,8 +11,8 @@ const body = async (request: AccountRequest) => {
 };
 const errorResponse = (error: unknown): AccountResponse => {
   if (!(error instanceof LabServiceError)) return { status: 503, body: { error: "LAB_UNAVAILABLE" } };
-  const status = error.code === "UNAUTHORIZED" ? 401 : error.code === "FORBIDDEN" ? 403 : error.code === "QUOTA_EXCEEDED" ? 429 : error.code === "NOT_FOUND" ? 404 : error.code === "EXPIRED" ? 410 : 400;
-  return { status, body: { error: error.code } };
+  const status = error.code === "UNAUTHORIZED" ? 401 : error.code === "FORBIDDEN" ? 403 : error.code === "QUOTA_EXCEEDED" ? 429 : error.code === "NOT_FOUND" ? 404 : error.code === "EXPIRED" ? 410 : error.code === "UNAVAILABLE" ? 503 : 400;
+  return { status, body: { error: error.code === "UNAVAILABLE" ? "LAB_UNAVAILABLE" : error.code } };
 };
 export const createLabHttpHandlers = (service: {
   provision(authorization: string, labId: string, labVersion: string): Promise<unknown>;

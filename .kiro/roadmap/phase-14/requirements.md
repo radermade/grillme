@@ -1,6 +1,6 @@
 # Phase 14 Requirements
 
-Status: planned; depends on semantic simulator and deployed canary infrastructure
+Status: local compatibility and simulator-canary foundation complete; scheduled live infrastructure and operator review pending
 
 ## R1: Versioned validation outcomes
 

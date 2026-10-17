@@ -71,7 +71,7 @@ export const createDeterministicEvaluationPort = (
   /bearer\s+[A-Za-z0-9._~+\/-]{20,}/i,
 ].some((pattern) => pattern.test(value));
 export { validateScenarioWorkspace } from "./scenario";
-export { deriveReadiness, assessmentReadinessEvidence, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, scenarioReadinessEvidence } from "./readiness";
+export { deriveReadiness, assessmentReadinessEvidence, grillReadinessEvidence, labReadinessEvidence, mockReadinessEvidence, projectActiveLabReadiness, scenarioReadinessEvidence } from "./readiness";
 export { decideMobileDirection } from "./mobile-discovery";
 export { validateSemanticConsoleState } from "./console";
 export { createDeterministicConsolePort } from "./console-provider";

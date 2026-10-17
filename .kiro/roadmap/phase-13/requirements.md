@@ -1,6 +1,6 @@
 # Phase 13 Requirements
 
-Status: planned; legal, security, and AWS-usage approval required before automation
+Status: local controlled foundation complete; legal, security, privacy, and AWS-usage approval required before real automation
 
 ## R1: Separate drift process
 

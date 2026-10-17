@@ -76,7 +76,7 @@ export type SemanticConsoleDefinition = {
 };
 export type ConsoleOperationRequest = { scenarioId: string; scenarioVersion: string; operationId: string; values: Record<string, ConsoleValue>; state: SemanticConsoleState };
 export type ConsoleOperationResult = { schemaVersion: 1; operationId: string; state: SemanticConsoleState; changedResourceIds: string[] };
-export type ConsoleValidation = { status: "passed" | "failed" | "inconclusive"; passedCheckIds: string[]; failedCheckIds: string[]; feedback: string[] };
+export type ConsoleValidation = import("./validator").LabValidation & { passedCheckIds: string[] };
 
 export type ConsoleProgress = {
   schemaVersion: 1;
@@ -116,6 +116,8 @@ export type ConsoleEvidenceEvent = {
   mode: ScenarioMode;
   checkpointId: string;
   status: ConsoleValidation["status"];
+  validatorId: string;
+  validatorVersion: string;
   passedCheckIds: string[];
   failedCheckIds: string[];
   hintsUsed: number;
