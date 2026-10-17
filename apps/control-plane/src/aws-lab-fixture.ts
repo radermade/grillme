@@ -1,0 +1,19 @@
+import type { PrivateAwsLabPolicy } from "./aws-lab-contracts";
+
+export const restrictedBedrockPolicy: PrivateAwsLabPolicy = {
+  schemaVersion: 1,
+  id: "bedrock-guided-policy",
+  version: "1",
+  labId: "bedrock-reliable-request",
+  labVersion: "1",
+  isolationModel: "dedicated-account-per-session",
+  region: "us-east-1",
+  allowedServices: ["bedrock-runtime"],
+  allowedActions: ["bedrock:InvokeModel"],
+  resourcePrefixes: ["arn:aws:bedrock:us-east-1::foundation-model/amazon."],
+  requiredTags: { "grillme:managed": "true" },
+  maxDurationMinutes: 30,
+  credentialDurationMinutes: 15,
+  spendLimitUsd: 1,
+  providerRoleConfigId: "restricted-bedrock-runtime-v1",
+};

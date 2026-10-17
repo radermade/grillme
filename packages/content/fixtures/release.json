@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "channel": "beta",
+  "version": "0.1.0",
+  "minimumSupportedVersion": "0.1.0",
+  "rolloutPercent": 100,
+  "rollbackVersion": null,
+  "status": "active",
+  "macosSigned": false,
+  "windowsSigned": false,
+  "publishedAt": "2026-10-17T00:00:00.000Z"
+}

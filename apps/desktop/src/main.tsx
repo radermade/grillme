@@ -1,14 +1,26 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Workspace } from "./Workspace";
-import { ErrorBoundary } from "./ErrorBoundary";
-import "./styles.css";
+import { learningFixtures } from "@grillme/content";
+import { ErrorBoundary, UiRuntimeProvider, Workspace, type UiRuntime } from "@grillme/ui";
+import {
+  analytics, auth, connectivity, contentReports, entitlements, labs, loadMetadata,
+  platform, privacy, readinessEvidence, releases, restrictedAws, support,
+  syncQueue, syncRemote, updates, workspaceNavigation,
+} from "./adapters";
+import "@grillme/ui/styles.css";
+
+const runtime: UiRuntime = {
+  platform: { ...platform, syncQueue }, auth, connectivity, sync: syncRemote,
+  labs, aws: restrictedAws, readiness: readinessEvidence, contentReports,
+  analytics, privacy, entitlements, releases, support, loadMetadata, updates,
+  fixtures: learningFixtures, applicationPlatform: "desktop", workspaceNavigation,
+};
 
 const root = document.querySelector<HTMLDivElement>("#root");
 if (!root) throw new Error("Application root is unavailable.");
 
 createRoot(root).render(
   <StrictMode>
-    <ErrorBoundary><Workspace /></ErrorBoundary>
+    <ErrorBoundary><UiRuntimeProvider value={runtime}><Workspace /></UiRuntimeProvider></ErrorBoundary>
   </StrictMode>,
 );

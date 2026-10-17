@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "status": "draft",
+  "sourceUrls": ["https://docs.aws.amazon.com/aws-certification/latest/examguides/ai-professional-01.html"],
+  "sourceRetrievedAt": "2026-10-16",
+  "skillIds": ["model-selection", "bedrock-integration", "prompt-context-design", "structured-output", "retrieval-systems", "retrieval-evaluation", "agents-tools", "data-protection", "iam-authorization", "output-safety", "governance", "evaluation", "safe-observability", "retry-reliability", "performance-cost", "deployment-lifecycle", "production-troubleshooting"],
+  "approvals": { "product": "pending", "technical": "pending", "instructional": "pending", "accessibility": "pending", "lab": "pending" },
+  "correctionOwner": null,
+  "nextReviewAt": "2026-11-16T00:00:00.000Z",
+  "knownLimitations": ["Skill mapping is pending qualified SME review.", "Current content is a capability fixture, not a complete course.", "Sandbox and restricted AWS labs are not deployed.", "Readiness thresholds are draft and not an exam-pass prediction."]
+}

@@ -100,3 +100,19 @@ textarea:focus-visible, input:focus-visible { outline: 3px solid var(--focus); o
 
 .form-help { color: #4d5c6f; font-size: .9rem; }
 @media (forced-colors: active) { .form-help { color: CanvasText; } }
+
+.prompt-reason { color: #4d5c6f; border-left: 4px solid #647386; padding-left: .75rem; }
+.feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+@media (forced-colors: active) { .prompt-reason { color: CanvasText; border-left-color: CanvasText; } }
+
+.scenario-grid, .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+.resource { min-width: 0; }
+.resource pre { max-height: 18rem; white-space: pre-wrap; }
+.setting { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(10rem, 16rem); gap: 1rem; align-items: center; padding: .5rem 0; }
+select { font: inherit; padding: .5rem; border: 2px solid #718096; border-radius: .4rem; background: var(--paper); color: var(--ink); }
+select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 620px) { .setting { grid-template-columns: 1fr; gap: .25rem; } }
+@media (forced-colors: active) { .resource, .result { border: 2px solid CanvasText; } }
+.account-status { display: flex; align-items: center; gap: .5rem; margin-right: auto; flex-wrap: wrap; }
+.account-status span { font-size: .9rem; }
+@media (max-width: 760px) { .account-status { width: 100%; } }

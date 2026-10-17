@@ -15,9 +15,13 @@
     "paths": {
       "@grillme/domain": ["./packages/domain/src/index.ts"],
       "@grillme/content": ["./packages/content/src/index.ts"],
+      "@grillme/control-plane": ["./apps/control-plane/src/index.ts"],
+      "@grillme/evaluation": ["./packages/evaluation/src/index.ts"],
       "@grillme/machines": ["./packages/machines/src/index.ts"],
-      "@grillme/platform": ["./packages/platform/src/index.ts"]
+      "@grillme/platform": ["./packages/platform/src/index.ts"],
+      "@grillme/ui": ["./packages/ui/src/index.ts"],
+      "@grillme/ui/*": ["./packages/ui/src/*"]
     }
   },
-  "include": ["apps/desktop/src/**/*.ts", "apps/desktop/src/**/*.tsx", "packages/**/*.ts", "prototypes/learning-loop/web/src/**/*.ts"]
+  "include": ["apps/control-plane/src/**/*.ts", "apps/desktop/src/**/*.ts", "apps/desktop/src/**/*.tsx", "apps/web/src/**/*.ts", "apps/web/src/**/*.tsx", "packages/**/*.ts", "prototypes/learning-loop/web/src/**/*.ts", "packages/ui/src/Workspace.tsx", "packages/ui/src/OperationsView.tsx", "packages/ui/src/GrillView.tsx", "packages/ui/src/TrainingView.tsx", "packages/ui/src/LabView.tsx", "packages/ui/src/ReadinessView.tsx", "packages/ui/src/ReviewView.tsx", "packages/ui/src/ErrorBoundary.tsx"]
 }

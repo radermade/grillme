@@ -1,0 +1,19 @@
+[
+  { "id": "model-selection", "title": "Model selection" },
+  { "id": "bedrock-integration", "title": "Bedrock integration" },
+  { "id": "prompt-context-design", "title": "Prompt and context design" },
+  { "id": "structured-output", "title": "Structured output" },
+  { "id": "retrieval-systems", "title": "Retrieval systems" },
+  { "id": "retrieval-evaluation", "title": "Retrieval evaluation" },
+  { "id": "agents-tools", "title": "Agents and tools" },
+  { "id": "data-protection", "title": "Data protection" },
+  { "id": "iam-authorization", "title": "IAM and authorization" },
+  { "id": "output-safety", "title": "Safety and guardrails" },
+  { "id": "governance", "title": "Governance" },
+  { "id": "evaluation", "title": "Evaluation" },
+  { "id": "safe-observability", "title": "Observability" },
+  { "id": "retry-reliability", "title": "Reliability" },
+  { "id": "performance-cost", "title": "Performance and cost" },
+  { "id": "deployment-lifecycle", "title": "Deployment lifecycle" },
+  { "id": "production-troubleshooting", "title": "Production troubleshooting" }
+]

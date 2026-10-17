@@ -3,5 +3,5 @@
   "private": true,
   "type": "module",
   "exports": "./src/index.ts",
-  "dependencies": { "@grillme/content": "*", "@grillme/domain": "*", "@grillme/platform": "*", "xstate": "5.33.2", "zod": "4.6.7" }
+  "dependencies": { "@grillme/content": "*", "@grillme/domain": "*", "@grillme/evaluation": "*", "@grillme/platform": "*", "xstate": "5.33.2", "zod": "4.6.7" }
 }

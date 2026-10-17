@@ -2,6 +2,7 @@ import { assign, fromPromise, setup } from "xstate";
 import { lessonIds, parseCourse } from "@grillme/content";
 import type { AppError, Course, CourseProgress, LearningEvent } from "@grillme/domain";
 import type { PlatformPorts } from "@grillme/platform";
+import { lessonSyncEvent } from "./sync-event";
 
 const progressKey = (course: Course) => `course-progress:${course.id}:${course.version}`;
 const eventsKey = (course: Course) => `learning-events:${course.id}:${course.version}`;
@@ -27,13 +28,15 @@ const outputOf = <T>(event: unknown): T => (event as DoneEvent<T>).output;
 const contentError: AppError = { code: "CONTENT_INVALID", message: "This course could not be opened safely." };
 const storageError: AppError = { code: "STORAGE_FAILED", message: "Progress is not saved on this device yet." };
 
-export const createCourseSessionMachine = (source: unknown, ports: PlatformPorts) => {
+export const createCourseSessionMachine = (source: unknown, ports: PlatformPorts, initialLessonId?: string) => {
   const load = async (): Promise<Loaded> => {
     const course = parseCourse(source);
     const ids = lessonIds(course);
     const stored = await ports.storage.get(progressKey(course));
     const candidate = stored as Partial<CourseProgress> | null;
-    const currentLessonId = candidate?.courseId === course.id
+    const currentLessonId = typeof initialLessonId === "string" && ids.includes(initialLessonId)
+      ? initialLessonId
+      : candidate?.courseId === course.id
       && candidate.courseVersion === course.version
       && typeof candidate.currentLessonId === "string"
       && ids.includes(candidate.currentLessonId)
@@ -59,7 +62,10 @@ export const createCourseSessionMachine = (source: unknown, ports: PlatformPorts
     const { course, pendingProgress, pendingEvent } = input.context;
     if (!course || !pendingProgress) throw new Error("No progress is ready to save.");
     await ports.storage.set(progressKey(course), pendingProgress);
-    if (pendingEvent) await ports.storage.append(eventsKey(course), pendingEvent);
+    if (pendingEvent) {
+      await ports.storage.append(eventsKey(course), pendingEvent);
+      await ports.syncQueue?.enqueue(lessonSyncEvent(pendingEvent));
+    }
     return pendingProgress;
   };
 
@@ -114,9 +120,11 @@ export const createCourseSessionMachine = (source: unknown, ports: PlatformPorts
       complete: assign(({ context }) => {
         if (!context.course || !context.progress) return {};
         const completed = [...new Set([...context.progress.completedLessonIds, context.progress.currentLessonId])];
+        const id = ports.ids.create();
         const pendingEvent: LearningEvent = {
           schemaVersion: 1,
-          id: ports.ids.create(),
+          id,
+          idempotencyKey: id,
           type: "lesson.completed",
           courseId: context.course.id,
           courseVersion: context.course.version,

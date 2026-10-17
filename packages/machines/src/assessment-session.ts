@@ -10,6 +10,7 @@ import type {
   SkillGap,
 } from "@grillme/domain";
 import type { PlatformPorts } from "@grillme/platform";
+import { assessmentSyncEvent } from "./sync-event";
 import { deriveSkillGaps, gradeAnswer, isAnswerComplete } from "./grading";
 import { scheduleFromGaps } from "./review-rules";
 
@@ -87,6 +88,7 @@ export const createAssessmentSessionMachine = (source: unknown, ports: PlatformP
     };
     await ports.storage.set(progressKey(assessment), next);
     await ports.storage.append(responseKey(assessment), pendingResponse);
+    await ports.syncQueue?.enqueue(assessmentSyncEvent(pendingResponse, assessment.courseId, assessment.courseVersion));
     return next;
   };
 

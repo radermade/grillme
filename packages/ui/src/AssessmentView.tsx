@@ -2,8 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useMachine } from "@xstate/react";
 import { createAssessmentSessionMachine, isAnswerComplete } from "@grillme/machines";
 import type { Assessment, AssessmentActivity, AssessmentAnswer } from "@grillme/domain";
-import assessmentSource from "./assessment.json";
-import { platform } from "./adapters";
+import { useUiRuntime } from "./runtime";
 
 type Props = { onOpenReview(): void };
 
@@ -35,7 +34,8 @@ const AnswerField = ({ activity, answer, send }: {
 };
 
 export function AssessmentView({ onOpenReview }: Props) {
-  const machine = useMemo(() => createAssessmentSessionMachine(assessmentSource, platform), []);
+  const { fixtures, platform } = useUiRuntime();
+  const machine = useMemo(() => createAssessmentSessionMachine(fixtures.assessment, platform), [fixtures.assessment, platform]);
   const [state, send] = useMachine(machine, {});
   const assessment = state.context.assessment as Assessment | null;
   const activity = assessment?.activities[state.context.currentIndex];

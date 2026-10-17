@@ -1,3 +1,15 @@
+export * from "./scenario";
+export * from "./auth";
+export * from "./sync";
+export * from "./lab";
+export * from "./aws-lab";
+export * from "./readiness";
+export * from "./mock";
+export * from "./content-governance";
+export * from "./operations";
+export * from "./commercial";
+export * from "./mobile-discovery";
+export * from "./grill";
 export * from "./assessment";
 export * from "./review";
 export type ContentBlock =
@@ -33,6 +45,7 @@ export type CourseProgress = {
 export type LearningEvent = {
   schemaVersion: 1;
   id: string;
+  idempotencyKey: string;
   type: "lesson.completed";
   courseId: string;
   courseVersion: string;

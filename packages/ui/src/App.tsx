@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useMachine } from "@xstate/react";
 import { createAppMachine, createCourseSessionMachine } from "@grillme/machines";
 import type { ContentBlock, Course, CourseProgress, Lesson } from "@grillme/domain";
-import courseSource from "./course.json";
-import { loadMetadata, platform, updates } from "./adapters";
+import { useUiRuntime } from "./runtime";
 
 const blocks = (items: ContentBlock[]) => items.map((block, index) => {
   if (block.type === "text") return <p key={index}>{block.body}</p>;
@@ -12,9 +11,10 @@ const blocks = (items: ContentBlock[]) => items.map((block, index) => {
   return <figure key={index}><figcaption><strong>{block.title}</strong><p>{block.description}</p></figcaption><ol className="diagram">{block.nodes.map((node) => <li key={node}>{node}</li>)}</ol></figure>;
 });
 
-export function App() {
-  const appMachine = useMemo(() => createAppMachine({ loadMetadata, updates }), []);
-  const courseMachine = useMemo(() => createCourseSessionMachine(courseSource, platform), []);
+export function App({ initialLessonId, onLessonChange }: { initialLessonId?: string; onLessonChange?(lessonId: string): void }) {
+  const { fixtures, loadMetadata, platform, updates } = useUiRuntime();
+  const appMachine = useMemo(() => createAppMachine({ loadMetadata, updates }), [loadMetadata, updates]);
+  const courseMachine = useMemo(() => createCourseSessionMachine(fixtures.course, platform, initialLessonId), [fixtures.course, initialLessonId, platform]);
   const [appState, sendApp] = useMachine(appMachine, {});
   const [courseState, sendCourse] = useMachine(courseMachine, {});
   const [navigationError, setNavigationError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export function App() {
           <button
             className={`lesson-link ${item.id === lesson.id ? "current" : ""} ${progress.completedLessonIds.includes(item.id) ? "complete" : ""}`}
             aria-current={item.id === lesson.id ? "page" : undefined}
-            onClick={() => sendCourse({ type: "GO_TO", lessonId: item.id })}
+            onClick={() => { sendCourse({ type: "GO_TO", lessonId: item.id }); onLessonChange?.(item.id); }}
           >{item.title}</button>
         </li>)}</ol>
       </section>)}

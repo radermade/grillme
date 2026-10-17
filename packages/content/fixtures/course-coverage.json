@@ -1,0 +1,10 @@
+[
+  { "id": "lesson-output-boundary", "type": "instruction", "skillIds": ["structured-output", "output-safety"], "remediation": false, "reviewStatus": "draft" },
+  { "id": "lesson-bounded-recovery", "type": "instruction", "skillIds": ["retry-reliability", "performance-cost"], "remediation": false, "reviewStatus": "draft" },
+  { "id": "lesson-safe-observability", "type": "instruction", "skillIds": ["safe-observability", "data-protection"], "remediation": false, "reviewStatus": "draft" },
+  { "id": "baseline-structured-output", "type": "assessment", "skillIds": ["structured-output", "output-safety", "retry-reliability", "safe-observability"], "remediation": true, "reviewStatus": "draft" },
+  { "id": "grill-structured-output", "type": "explanation", "skillIds": ["structured-output", "retry-reliability", "safe-observability"], "remediation": true, "reviewStatus": "draft" },
+  { "id": "scenario-safe-bedrock", "type": "scenario", "skillIds": ["structured-output", "output-safety"], "remediation": true, "reviewStatus": "draft" },
+  { "id": "debug-timeout", "type": "debugging", "skillIds": ["retry-reliability", "safe-observability"], "remediation": true, "reviewStatus": "draft" },
+  { "id": "lab-reliable-request", "type": "lab", "skillIds": ["bedrock-integration", "structured-output", "output-safety", "retry-reliability", "safe-observability"], "remediation": true, "reviewStatus": "draft" }
+]

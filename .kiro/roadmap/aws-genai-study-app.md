@@ -153,6 +153,8 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 
 ## Phase 3: Adaptive grill experience
 
+**Status:** Local client and control-plane core complete with deterministic fallback, validated HTTP/service boundaries, and 31 passing project tests; concrete hosting/auth/quota/provider adapters, model consistency studies, and manual accessibility review pending. See [`phase-3/requirements.md`](phase-3/requirements.md), [`phase-3/design.md`](phase-3/design.md), and [`phase-3/tasks.md`](phase-3/tasks.md).
+
 **Goal:** Make free-response explanation and follow-up reasoning the primary study interaction.
 
 ### Slice 3.1: Rubric-scored free response
@@ -178,20 +180,23 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 
 **Exit criteria:** A learner can complete a multi-turn session, understand why each follow-up was asked, and receive a reproducible evidence-linked summary.
 
-## Phase 4: Scenario and debugging practice
+## Phase 4: Guided scenarios and debugging practice
 
-**Goal:** Assess architecture judgment and troubleshooting without the cost and risk of live cloud accounts.
+**Status:** Reusable guided-scenario engine locally complete with walkthrough/practice/challenge modes and architecture/debugging capability fixtures. Production content generation is deferred to Phase 8; manual accessibility review remains open. See [`phase-4/requirements.md`](phase-4/requirements.md), [`phase-4/design.md`](phase-4/design.md), and [`phase-4/tasks.md`](phase-4/tasks.md).
 
-### Slice 4.1: Architecture decision scenarios
+**Goal:** Build a reusable walkthrough, practice, and challenge engine for architecture judgment and troubleshooting without live cloud accounts.
 
-- Present constrained AWS scenarios with requirements, trade-offs, and distractors.
-- Capture the learner's proposed components, connections, and written defense.
-- Evaluate required constraints deterministically and use rubric-based feedback for reasoning quality.
-- Keep the scenario model independent of the visual canvas so mobile can use an alternate interaction later.
+### Slice 4.1: Guided scenario engine
+
+- Run the same versioned scenario in walkthrough, practice, and independent challenge modes.
+- Fade guidance from instructions, to progressive hints, to objective-only validation.
+- Validate observable workspace outcomes rather than prescribed clicks.
+- Support safe experimentation, checkpoint reset, revision, debrief, and guidance-aware evidence.
+- Keep scenario and workspace models independent of the visual presentation for future web and mobile clients.
 
 **Primary machine:** scenario session with inspect, design, validate, defend, revise, and complete states.
 
-**Exit criteria:** Learners can revise a design after constraint-specific feedback, and the same scenario can be completed without relying on pointer-only interactions.
+**Exit criteria:** The same scenario runs in all three modes, learners can revise after constraint-specific feedback, and every operation is available without pointer-only interaction.
 
 ### Slice 4.2: Local debugging challenges
 
@@ -202,9 +207,11 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 
 **Primary machine:** challenge lifecycle with inspect, attempt, validating, failed-checks, hinting, solved, and abandoned states.
 
-**Exit criteria:** At least three representative debugging challenges run reproducibly and cannot access files or processes outside their intended boundary.
+**Exit criteria:** Architecture and debugging fixtures prove the reusable engine, validators run reproducibly without code or shell execution, and production content-library targets are tracked in Phase 8.
 
 ## Phase 5: Identity, entitlements, and synchronization
+
+**Status:** Provider-neutral engineering core locally complete; deployment and external validation pending.
 
 **Goal:** Let customers use the product across devices while preserving offline study and trustworthy scored progress.
 
@@ -233,6 +240,8 @@ Time ranges are planning estimates, not commitments. A slice is complete only wh
 **Exit criteria:** Repeated delivery, network loss, process termination, and two-device updates produce no lost or duplicated progress events.
 
 ## Phase 6: Disposable sandbox labs
+
+**Status:** Provider-neutral foundation and controlled fixture locally complete; deployed sandbox and content validation pending.
 
 **Goal:** Deliver implementation labs in isolated remote environments before granting access to real AWS resources.
 
@@ -273,6 +282,8 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 7: Restricted real-AWS labs
 
+**Status:** Restricted-operation broker and credential lifecycle locally complete; AWS deployment and production-like labs pending.
+
 **Goal:** Validate production-like AWS skills in temporary, tightly constrained environments.
 
 ### Slice 7.1: AWS account and credential vending
@@ -298,11 +309,14 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 8: Course completion and readiness
 
+**Status:** Readiness, mock, coverage-audit, and correction foundations locally complete; production course and approvals pending.
+
 **Goal:** Turn the validated learning mechanics into a coherent, purchasable AIP-C01 preparation course.
 
-### Slice 8.1: Full module production
+### Slice 8.1: Full module and scenario production
 
-- Produce all planned modules through the versioned content pipeline.
+- Produce all planned modules and the production walkthrough/practice/challenge library through the versioned content pipeline.
+- Include at least three reviewed debugging challenges and representative architecture scenarios before course release.
 - Require technical review, instructional review, accessibility review, and lab validation before release.
 - Link each activity and rubric criterion to the skill map and source version.
 - Add content correction and learner-report workflows.
@@ -321,6 +335,8 @@ Deliver six to ten sandbox labs spanning:
 **Exit criteria:** Readiness explanations are traceable to learner evidence, and changing a scoring rule can recompute summaries without rewriting history.
 
 ## Phase 9: Private beta and first commercial release
+
+**Status:** Private-beta operations and commercial-control foundations locally complete; real beta and production release pending.
 
 **Goal:** Validate product value, operational safety, and commercial readiness with real customers.
 
@@ -343,6 +359,8 @@ Deliver six to ten sandbox labs spanning:
 **Exit criteria:** A customer can purchase, install, learn, use labs, synchronize progress, manage their data, and receive support through a production-operated path.
 
 ## Phase 10: Web and mobile expansion
+
+**Status:** Portable UI and full-web composition locally complete; deployed parity and mobile research pending.
 
 **Goal:** Extend validated workflows without weakening platform boundaries or forcing desktop interaction patterns onto other devices.
 

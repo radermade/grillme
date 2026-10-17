@@ -2,6 +2,7 @@ import { assign, fromPromise, setup } from "xstate";
 import { parseReviewSchedule } from "@grillme/content";
 import type { AppError, ReviewEvent, ReviewItem, ReviewSchedule } from "@grillme/domain";
 import type { PlatformPorts } from "@grillme/platform";
+import { reviewSyncEvent } from "./sync-event";
 import { rescheduleItem } from "./review-rules";
 
 const scheduleKey = (courseId: string, courseVersion: string) => `review-schedule:${courseId}:${courseVersion}`;
@@ -47,6 +48,7 @@ export const createReviewSessionMachine = (
     if (!input.context.pendingSchedule || !input.context.pendingEvent) throw new Error("Review update is unavailable.");
     await ports.storage.set(scheduleKey(courseId, courseVersion), input.context.pendingSchedule);
     await ports.storage.append(eventsKey(courseId, courseVersion), input.context.pendingEvent);
+    await ports.syncQueue?.enqueue(reviewSyncEvent(input.context.pendingEvent));
     return input.context.pendingSchedule;
   };
   return setup({

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "structured-output-grill",
+  "version": "1.0.0",
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "title": "Production model integration grill",
+  "description": "Explain and defend reliable structured-output decisions across validation, safety, and operations.",
+  "maxTurns": 4,
+  "maxEvaluationAttempts": 2,
+  "evaluationBudget": 4,
+  "prompts": [
+    {
+      "id": "output-boundary",
+      "skillId": "structured-output",
+      "question": "A Bedrock response parses as JSON. Defend the checks required before the application can use it.",
+      "reason": "Establish whether parsing, validation, and authority are separate in your mental model.",
+      "hint": "Consider syntax, shape, field constraints, safety, and permissions.",
+      "rubric": {
+        "id": "output-boundary-rubric",
+        "version": "1.0.0",
+        "concepts": [
+          { "id": "runtime-schema", "label": "runtime schema validation", "terms": ["schema", "field type", "shape"], "remediation": "Validate required fields, types, ranges, size, and unexpected keys.", "probe": "How is runtime schema validation different from successful JSON parsing?" },
+          { "id": "safety-policy", "label": "deterministic safety policy", "terms": ["safety", "sanitize", "escape", "guardrail"], "remediation": "Apply deterministic safety and destination controls before display or execution.", "probe": "Which safety checks should run before output reaches its destination?" },
+          { "id": "authority-boundary", "label": "authority remains outside the model", "terms": ["authorization", "permission", "authority", "least privilege"], "remediation": "Never let model output grant permissions or bypass tool policy.", "probe": "Can structurally valid model output authorize a privileged tool call? Why?" }
+        ],
+        "misconceptions": [
+          { "id": "parse-equals-valid", "label": "parsing proves validity", "terms": ["parsing is enough", "json parse is enough"], "correction": "Parsing proves syntax only; it does not prove schema, safety, or authority.", "probe": "What can still be wrong after JSON.parse succeeds?" }
+        ]
+      }
+    },
+    {
+      "id": "bounded-recovery",
+      "skillId": "retry-reliability",
+      "question": "Design a recovery policy for malformed or invalid model output under a strict latency and cost budget.",
+      "reason": "Probe reliability and cost trade-offs after output validation.",
+      "hint": "Name retry eligibility, total attempts, observability, and terminal behavior.",
+      "rubric": {
+        "id": "bounded-recovery-rubric",
+        "version": "1.0.0",
+        "concepts": [
+          { "id": "retry-eligibility", "label": "retry only recoverable failures", "terms": ["recoverable", "retryable", "transient"], "remediation": "Retry only failures likely to succeed on another attempt.", "probe": "Which validation failures are actually worth retrying?" },
+          { "id": "attempt-limit", "label": "bounded total attempts", "terms": ["max attempts", "attempt limit", "bounded", "two attempts"], "remediation": "Set an explicit total attempt limit.", "probe": "What prevents retries from becoming an availability or cost incident?" },
+          { "id": "terminal-failure", "label": "explicit terminal failure", "terms": ["terminal", "typed error", "fail", "stop"], "remediation": "Return a typed terminal result when attempts are exhausted.", "probe": "What does the caller receive after the final failed attempt?" }
+        ],
+        "misconceptions": [
+          { "id": "retry-forever", "label": "unbounded retry", "terms": ["retry forever", "until it works", "unlimited retries"], "correction": "Unbounded retries amplify latency, cost, and dependency failure.", "probe": "How would you cap attempts and total request time?" }
+        ]
+      }
+    },
+    {
+      "id": "safe-observability",
+      "skillId": "safe-observability",
+      "question": "Which production signals would you capture to diagnose output failures without leaking sensitive content?",
+      "reason": "Test whether operational evidence and data minimization coexist.",
+      "hint": "Separate metadata such as latency and failure category from prompts and raw output.",
+      "rubric": {
+        "id": "safe-observability-rubric",
+        "version": "1.0.0",
+        "concepts": [
+          { "id": "operational-signals", "label": "useful operational signals", "terms": ["latency", "attempt", "failure category", "token", "outcome"], "remediation": "Capture attempts, latency, failure category, token use, and terminal outcome.", "probe": "Which measurements distinguish model, parser, validator, and policy failures?" },
+          { "id": "data-minimization", "label": "sensitive data minimization", "terms": ["redact", "no raw", "avoid prompt", "sensitive", "secret"], "remediation": "Do not log prompts, raw output, secrets, or sensitive retrieved data by default.", "probe": "Which fields should never enter ordinary telemetry?" }
+        ],
+        "misconceptions": []
+      }
+    }
+  ]
+}

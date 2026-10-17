@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "aip-c01-draft-readiness",
+  "version": "1",
+  "maxAgeDays": 30,
+  "weights": { "assessment": 1, "explanation": 1.5, "scenario": 2, "debugging": 2, "lab": 2.5, "mock": 1 },
+  "highImpactSkillIds": ["bedrock-integration", "structured-output", "retrieval-systems", "iam-authorization", "output-safety", "retry-reliability", "production-troubleshooting"],
+  "minimumEvidence": 2,
+  "minimumTypes": 2,
+  "demonstratingScore": 0.75
+}

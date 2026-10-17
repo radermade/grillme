@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "reliable-integration-mock",
+  "version": "1",
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "title": "Reliable integration mock preview",
+  "description": "A short original-content preview of timed mock behavior. It is not a full AIP-C01 simulation.",
+  "durationMinutes": 15,
+  "items": [
+    { "id": "runtime-validation", "skillIds": ["structured-output"], "prompt": "A Bedrock response parses as JSON. Which next step establishes an application data boundary?", "choices": [{ "id": "validate", "label": "Validate the runtime schema and field constraints" }, { "id": "trust", "label": "Trust it because parsing succeeded" }, { "id": "render", "label": "Render all fields before validation" }], "correctChoiceId": "validate", "rationale": "Parsing proves syntax only; runtime validation establishes the data boundary." },
+    { "id": "bounded-attempts", "skillIds": ["retry-reliability", "performance-cost"], "prompt": "Which recovery policy best bounds latency and cost?", "choices": [{ "id": "bounded", "label": "Retry eligible failures within a total attempt and time limit" }, { "id": "forever", "label": "Retry every failure until success" }, { "id": "silent", "label": "Suppress the failure and return an empty result" }], "correctChoiceId": "bounded", "rationale": "Explicit eligibility, attempt, and time limits prevent amplified failures." },
+    { "id": "authority", "skillIds": ["output-safety", "iam-authorization"], "prompt": "A model requests broader tool permissions. What should authorize the change?", "choices": [{ "id": "policy", "label": "A deterministic server-side policy and authenticated principal" }, { "id": "model", "label": "The model response itself" }, { "id": "client", "label": "A client-side flag" }], "correctChoiceId": "policy", "rationale": "Model and client output are untrusted and cannot grant authority." },
+    { "id": "telemetry", "skillIds": ["safe-observability", "data-protection"], "prompt": "Which telemetry is useful while minimizing sensitive data?", "choices": [{ "id": "metadata", "label": "Latency, attempt count, failure category, and terminal outcome" }, { "id": "raw", "label": "Every prompt and raw model response" }, { "id": "credentials", "label": "Temporary credentials and request headers" }], "correctChoiceId": "metadata", "rationale": "Operational metadata supports diagnosis without reproducing sensitive content." },
+    { "id": "cleanup", "skillIds": ["deployment-lifecycle", "production-troubleshooting"], "prompt": "What independently limits damage when a lab client disappears?", "choices": [{ "id": "ttl", "label": "Server TTL, revocation, and an independent resource sweeper" }, { "id": "window", "label": "Keeping the application window open" }, { "id": "memory", "label": "A client-only timer" }], "correctChoiceId": "ttl", "rationale": "Server-enforced expiry and independent cleanup do not depend on client health." }
+  ]
+}

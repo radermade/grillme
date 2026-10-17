@@ -1,0 +1,12 @@
+{
+  "name": "@grillme/control-plane",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@grillme/content": "*",
+    "@grillme/domain": "*",
+    "@grillme/evaluation": "*",
+    "zod": "4.6.7"
+  }
+}

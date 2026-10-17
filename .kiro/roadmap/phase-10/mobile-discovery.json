@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cohortSize": 1,
+  "observationDays": 7,
+  "mobileSizedSessions": 0,
+  "totalSessions": 1,
+  "shortSessions": 0,
+  "workflowDemand": { "reading": 0, "review": 0, "short-grill": 0, "readiness": 0, "lab": 0 },
+  "candidates": [
+    { "id": "tauri-mobile", "capability": 3, "accessibility": 3, "distribution": 2, "teamCost": 3 },
+    { "id": "react-native", "capability": 4, "accessibility": 4, "distribution": 4, "teamCost": 5 },
+    { "id": "pwa", "capability": 2, "accessibility": 3, "distribution": 5, "teamCost": 2 }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "bedrock-reliable-request",
+  "version": "1",
+  "courseId": "aws-aip-c01",
+  "courseVersion": "0.1.0",
+  "title": "Build a reliable Bedrock request",
+  "description": "Configure a controlled Bedrock SDK substitute for bounded retries, structured output, output safety, and privacy-safe telemetry.",
+  "imageDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "maxDurationMinutes": 30,
+  "maxAttempts": 3,
+  "estimatedCostUnits": 1,
+  "starterFiles": [{ "path": "/workspace/request.ts", "content": "export const requestPolicy = { retries: 0, schema: false, blockUnsafe: false, telemetry: 'raw' };" }],
+  "checkpoints": [{
+    "id": "reliability",
+    "title": "Harden the request path",
+    "objective": "Configure bounded retries, strict structured output, unsafe-output blocking, and sanitized telemetry.",
+    "instructions": "Use the controlled operations to update the remote workspace, then ask the server to validate observable state.",
+    "hints": ["Start by bounding retries.", "Enable strict schema and unsafe-output blocking.", "Raw model output must not enter telemetry." ]
+  }],
+  "debrief": { "explanation": "Reliable model calls need bounded retries, validated output, explicit safety handling, and telemetry minimization.", "prevention": "Keep these controls in shared request infrastructure and verify them with deterministic integration checks." }
+}

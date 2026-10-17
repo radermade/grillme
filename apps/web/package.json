@@ -1,0 +1,5 @@
+{
+  "name": "@grillme/web",
+  "private": true,
+  "type": "module"
+}

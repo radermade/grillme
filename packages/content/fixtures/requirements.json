@@ -1,0 +1,6 @@
+{
+  "platforms": ["macOS and Windows support remain pending signed-build validation."],
+  "offline": ["Lessons, local assessments, reviews, and local scenarios support offline use after content is available.", "Sign-in, synchronization, assisted evaluation, sandbox labs, restricted AWS labs, support submission, privacy requests, and release checks require connectivity."],
+  "privacy": ["Product analytics are optional and disabled by default.", "Operational support snapshots exclude prompts, responses, diagnoses, credentials, and file contents.", "Account export and deletion require a deployed authenticated control plane."],
+  "release": ["This build is an unsigned local beta fixture and is not commercially distributed."]
+}

@@ -1,0 +1,96 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": "safe-bedrock-flow",
+    "version": "1.0.0",
+    "courseId": "aws-aip-c01",
+    "courseVersion": "0.1.0",
+    "kind": "architecture",
+    "title": "Design a safe Bedrock response flow",
+    "description": "Assemble and configure a minimal production response path.",
+    "skillIds": ["structured-output", "output-safety"],
+    "availableComponents": [
+      { "id": "application", "label": "Application" },
+      { "id": "bedrock", "label": "Amazon Bedrock" },
+      { "id": "validator", "label": "Schema validator" },
+      { "id": "policy", "label": "Safety policy" },
+      { "id": "browser", "label": "Browser renderer" }
+    ],
+    "availableSettings": [
+      { "id": "attempt-limit", "label": "Maximum model calls", "options": ["unlimited", "2", "3"] },
+      { "id": "telemetry", "label": "Telemetry content", "options": ["raw-output", "sanitized-metadata"] }
+    ],
+    "resources": [],
+    "initialWorkspace": { "selectedComponents": ["application", "bedrock"], "connections": [], "settings": { "attempt-limit": "unlimited", "telemetry": "raw-output" }, "diagnosis": "" },
+    "checkpoints": [
+      {
+        "id": "validation-boundary",
+        "title": "Add deterministic boundaries",
+        "objective": "Add schema and safety validation between Bedrock and rendering.",
+        "instruction": "Select the validator, safety policy, and browser. Connect Bedrock to validator, validator to policy, and policy to browser.",
+        "rationale": "Parsing and model output cannot directly authorize or reach a destination.",
+        "hints": ["The model output needs two deterministic checks.", "The order is Bedrock, schema validation, safety policy, then browser."],
+        "checks": [
+          { "id": "has-validator", "type": "component-selected", "componentId": "validator", "message": "Add a schema validator." },
+          { "id": "has-policy", "type": "component-selected", "componentId": "policy", "message": "Add a safety policy." },
+          { "id": "has-browser", "type": "component-selected", "componentId": "browser", "message": "Add the output destination." },
+          { "id": "model-validator", "type": "connection", "from": "bedrock", "to": "validator", "message": "Connect Bedrock to schema validation." },
+          { "id": "validator-policy", "type": "connection", "from": "validator", "to": "policy", "message": "Connect schema validation to safety policy." },
+          { "id": "policy-browser", "type": "connection", "from": "policy", "to": "browser", "message": "Connect validated output to the browser." }
+        ]
+      },
+      {
+        "id": "operational-bounds",
+        "title": "Bound retries and telemetry",
+        "objective": "Apply a two-call limit and sanitized operational telemetry.",
+        "instruction": "Set maximum model calls to 2 and telemetry to sanitized metadata.",
+        "rationale": "Bounded attempts control latency/cost while sanitized metadata supports diagnosis without storing output.",
+        "hints": ["Both remaining checks are configuration settings."],
+        "checks": [
+          { "id": "bounded", "type": "setting", "settingId": "attempt-limit", "value": "2", "message": "Set the maximum model calls to 2." },
+          { "id": "sanitized", "type": "setting", "settingId": "telemetry", "value": "sanitized-metadata", "message": "Use sanitized metadata telemetry." }
+        ]
+      }
+    ],
+    "debrief": { "rootCause": "Direct model-to-renderer flow lacked deterministic validation and operational bounds.", "prevention": "Require schema, safety, retry, and telemetry policies in reusable integration templates.", "explanation": "The finished flow validates observable architecture state instead of checking which controls were clicked." }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bedrock-timeout-debug",
+    "version": "1.0.0",
+    "courseId": "aws-aip-c01",
+    "courseVersion": "0.1.0",
+    "kind": "debugging",
+    "title": "Diagnose repeated model timeouts",
+    "description": "Inspect code, logs, configuration, and failing tests to repair an unsafe retry policy.",
+    "skillIds": ["retry-reliability", "safe-observability"],
+    "availableComponents": [],
+    "availableSettings": [
+      { "id": "max-attempts", "label": "Maximum attempts", "options": ["unlimited", "2", "4"] },
+      { "id": "log-content", "label": "Log content", "options": ["raw-output", "failure-category"] }
+    ],
+    "resources": [
+      { "id": "code", "type": "code", "title": "retry.ts", "body": "while (true) { await invokeModel(); }" },
+      { "id": "logs", "type": "log", "title": "application.log", "body": "ERROR timeout; retrying\nERROR timeout; retrying\nWARN raw response recorded" },
+      { "id": "config", "type": "config", "title": "policy.json", "body": "{ maxAttempts: unlimited, logContent: raw-output }" },
+      { "id": "tests", "type": "test-output", "title": "validator", "body": "FAIL attempt limit\nFAIL sensitive telemetry" }
+    ],
+    "initialWorkspace": { "selectedComponents": [], "connections": [], "settings": { "max-attempts": "unlimited", "log-content": "raw-output" }, "diagnosis": "" },
+    "checkpoints": [
+      {
+        "id": "repair-timeout-policy",
+        "title": "Repair the timeout policy",
+        "objective": "Diagnose the failure and configure bounded attempts with safe telemetry.",
+        "instruction": "Set maximum attempts to 2, log only failure categories, and explain the unbounded retry and raw-output risks.",
+        "rationale": "Retries need a terminal condition, and logs should contain metadata rather than sensitive model content.",
+        "hints": ["The loop has no terminal condition.", "The tests identify both the retry and telemetry failures."],
+        "checks": [
+          { "id": "attempts", "type": "setting", "settingId": "max-attempts", "value": "2", "message": "Set maximum attempts to 2." },
+          { "id": "logs", "type": "setting", "settingId": "log-content", "value": "failure-category", "message": "Log failure categories instead of raw output." },
+          { "id": "diagnosis", "type": "diagnosis-concepts", "concepts": [["unbounded", "infinite", "no limit"], ["raw output", "sensitive", "data leak"]], "message": "Explain both the unbounded retry and sensitive logging risks." }
+        ]
+      }
+    ],
+    "debrief": { "rootCause": "An unbounded loop amplified timeouts and raw output was written to logs.", "prevention": "Use bounded attempts, explicit terminal errors, failure categories, and telemetry field allowlists.", "explanation": "The repair is validated from settings and diagnosis evidence without executing the fixture code." }
+  }
+]

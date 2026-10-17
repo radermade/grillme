@@ -1,0 +1,17 @@
+{
+  "name": "@grillme/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "dependencies": {
+    "@grillme/content": "*",
+    "@grillme/domain": "*",
+    "@grillme/machines": "*",
+    "@grillme/platform": "*",
+    "@xstate/react": "6.1.0",
+    "react": "19.3.1"
+  }
+}

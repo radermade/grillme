@@ -1,12 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { useMachine } from "@xstate/react";
 import { createReviewSessionMachine } from "@grillme/machines";
-import { platform } from "./adapters";
+import { useUiRuntime } from "./runtime";
 
 type Props = { courseId: string; courseVersion: string; onOpenAssessment(): void };
 
 export function ReviewView({ courseId, courseVersion, onOpenAssessment }: Props) {
-  const machine = useMemo(() => createReviewSessionMachine(courseId, courseVersion, platform), [courseId, courseVersion]);
+  const { platform } = useUiRuntime();
+  const machine = useMemo(() => createReviewSessionMachine(courseId, courseVersion, platform), [courseId, courseVersion, platform]);
   const [state, send] = useMachine(machine, {});
   useEffect(() => { document.querySelector<HTMLElement>("#review")?.focus(); }, [state.value]);
 
