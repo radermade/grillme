@@ -1,0 +1,22 @@
+{
+  "participantId": "P001",
+  "valid": true,
+  "completedWithoutHelp": true,
+  "durationMinutes": 31,
+  "baseline": {
+    "outputHandling": 1,
+    "safety": 1,
+    "operations": 0,
+    "tradeoffs": 1
+  },
+  "final": {
+    "outputHandling": 3,
+    "safety": 2,
+    "operations": 2,
+    "tradeoffs": 2
+  },
+  "identifiedMalformedOutput": true,
+  "identifiedUnboundedRetry": true,
+  "explainedDeterministicValidation": true,
+  "severeUnresolvedIssue": false
+}
