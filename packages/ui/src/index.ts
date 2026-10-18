@@ -4,3 +4,6 @@ export { Workspace } from "./Workspace";
 export { ThemeProvider, useTheme } from "./theme";
 export { ApplicationRail, CoachCallout, CodeSurface, CommandBar, Dialog, Field, Panel, ProgressMeter, ResourceTable, SplitPane, StatusBadge } from "./primitives";
 export { ConsoleView } from "./ConsoleView";
+export { ManagedConsoleView } from "./ManagedConsoleView";
+export { VisualStateCatalog } from "./VisualStateCatalog";
+export { ConsoleCaptureScene } from "./ConsoleCaptureScene";

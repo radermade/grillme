@@ -398,7 +398,7 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 12: Semantic AWS Console simulation
 
-**Status:** Implementation complete and automated checks passed; manual keyboard/accessibility review and learner comparison remain pending. See [`phase-12/requirements.md`](phase-12/requirements.md), [`phase-12/design.md`](phase-12/design.md), and [`phase-12/tasks.md`](phase-12/tasks.md).
+**Status:** Semantic engine complete; exact capture-backed walkthrough is blocked pending reviewed, hash-pinned AWS Console capture coverage and manual review. See [`phase-12/requirements.md`](phase-12/requirements.md), [`phase-12/design.md`](phase-12/design.md), and [`phase-12/tasks.md`](phase-12/tasks.md).
 
 **Goal:** Teach AWS-console familiarity through a versioned semantic model while preserving durable capability outcomes.
 
@@ -414,7 +414,7 @@ Deliver six to ten sandbox labs spanning:
 - Version learning intent, AWS semantic mapping, presentation mapping, and guidance separately.
 - Preserve reset, revision, debrief, and guidance-aware evidence.
 
-**Exit criteria:** One representative scenario operates safely in all three modes and can swap simulator providers later without changing its learning invariant.
+**Exit criteria:** Every Bedrock walkthrough checkpoint has reviewed, hash-pinned, viewport-specific AWS Console captures with complete accessible anchor coverage; walkthrough fails closed on drift, and the same semantic intent validates across exact walkthrough, semantic practice, and approved managed-console challenge modes.
 
 ## Phase 13: AWS Console drift crawler
 
@@ -463,7 +463,7 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 15: Managed AWS Console companion
 
-**Status:** Planned; high-risk deployment requires approved isolation, federation, budgets, audit, and cleanup. See [`phase-15/requirements.md`](phase-15/requirements.md), [`phase-15/design.md`](phase-15/design.md), and [`phase-15/tasks.md`](phase-15/tasks.md).
+**Status:** Controlled local companion foundation complete; real managed AWS deployment and security approval remain pending. See [`phase-15/requirements.md`](phase-15/requirements.md), [`phase-15/design.md`](phase-15/design.md), and [`phase-15/tasks.md`](phase-15/tasks.md).
 
 **Goal:** Combine simulation with actual AWS-console familiarity in isolated managed environments.
 
@@ -484,7 +484,7 @@ Deliver six to ten sandbox labs spanning:
 
 ## Phase 16: Drift operations and authoring support
 
-**Status:** Planned; depends on crawler and validator evidence. See [`phase-16/requirements.md`](phase-16/requirements.md), [`phase-16/design.md`](phase-16/design.md), and [`phase-16/tasks.md`](phase-16/tasks.md).
+**Status:** Controlled local workflow and authoring foundation complete; deployed ownership, live evidence, and operations review remain pending. See [`phase-16/requirements.md`](phase-16/requirements.md), [`phase-16/design.md`](phase-16/design.md), and [`phase-16/tasks.md`](phase-16/tasks.md).
 
 **Goal:** Turn detected console and validator drift into safe, reviewed, reversible content and compatibility releases.
 

@@ -2,7 +2,7 @@ import { createContext, useContext, type ReactNode } from "react";
 import type { LearningFixtures } from "@grillme/content";
 import type {
   AuthPort, AwsLabPort, ConnectivityPort, ConsolePort, ContentReportPort, EntitlementPort,
-  LabPort, PlatformPorts, PrivacyPort, ProductAnalyticsPort, ReadinessEvidencePort,
+  LabPort, ManagedConsolePort, PlatformPorts, PrivacyPort, ProductAnalyticsPort, ReadinessEvidencePort,
   ReleasePort, SupportPort, SyncPort, SyncQueuePort, UpdatePort,
 } from "@grillme/platform";
 
@@ -22,6 +22,7 @@ export type UiRuntime = {
   sync: SyncPort;
   labs: LabPort;
   console: ConsolePort;
+  managedConsole: ManagedConsolePort;
   aws: AwsLabPort;
   readiness: ReadinessEvidencePort;
   contentReports: ContentReportPort;

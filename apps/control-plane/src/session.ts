@@ -35,3 +35,9 @@ export const createSessionService = (provider: IdentityProvider, cleanup?: Accou
     if (revoked) await cleanup?.revokeForUser(revoked.userId);
   },
 });
+export const composePrivilegeCleanup = (...cleanups: AccountPrivilegeCleanup[]): AccountPrivilegeCleanup => ({
+  async revokeForUser(userId) {
+    const results = await Promise.allSettled(cleanups.map((cleanup) => cleanup.revokeForUser(userId)));
+    if (results.some(({ status }) => status === "rejected")) throw new Error("PRIVILEGE_CLEANUP_FAILED");
+  },
+});

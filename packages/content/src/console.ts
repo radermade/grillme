@@ -14,10 +14,10 @@ const state = z.object({
 }).strict();
 const field = z.object({ id, label: z.string().min(1).max(200), type: z.enum(["text", "select"]), required: z.boolean(), options: z.array(z.object({ value: z.string().min(1).max(200), label: z.string().min(1).max(200) }).strict()).min(1).max(30).optional(), maxLength: z.number().int().positive().max(500).optional() }).strict();
 const service = z.object({ id, targetId: id, name: z.string().min(1).max(200), description: text }).strict();
-const view = z.object({ id, targetId: id, serviceId: id, title: z.string().min(1).max(200), type: z.enum(["list", "details", "form", "logs"]) }).strict();
+const view = z.object({ id, targetId: id, serviceId: id, title: z.string().min(1).max(200), type: z.enum(["list", "details", "form", "logs"]), resourceTypes: z.array(id).min(1).max(20) }).strict();
 const form = z.object({ id, targetId: id, title: z.string().min(1).max(200), fields: z.array(field).max(20) }).strict();
 const operation = z.object({ id, targetId: id, serviceId: id, label: z.string().min(1).max(200), description: text, formId: id }).strict();
-const checkpoint = z.object({ id, title: z.string().min(1).max(200), objective: text, operationId: id, intent: text, instruction: text, rationale: text, expectedOutcome: text, hints: z.array(text).max(5) }).strict();
+const checkpoint = z.object({ id, title: z.string().min(1).max(200), objective: text, operationId: id, intent: text, instruction: text, rationale: text, expectedOutcome: text, navigation: z.object({ viewId: id, resourceId: id.nullable() }).strict(), hints: z.array(text).max(5) }).strict();
 export const semanticConsoleSchema = z.object({
   schemaVersion: z.literal(1), id, version, simulatorVersion: version, courseId: id, courseVersion: version,
   title: z.string().min(1).max(200), description: text, skillIds: z.array(id).min(1).max(20),
@@ -35,6 +35,8 @@ export const semanticConsoleSchema = z.object({
   if (console.views.some(({ serviceId }) => !serviceIds.includes(serviceId)) || console.operations.some(({ serviceId }) => !serviceIds.includes(serviceId))) context.addIssue({ code: "custom", message: "Console item references an unknown service." });
   if (console.operations.some(({ formId }) => !formIds.includes(formId))) context.addIssue({ code: "custom", message: "Operation references an unknown form." });
   if (console.checkpoints.some(({ operationId }) => !operationIds.includes(operationId))) context.addIssue({ code: "custom", message: "Checkpoint references an unknown operation." });
+  const viewIds = console.views.map(({ id: viewId }) => viewId);
+  if (console.checkpoints.some(({ navigation }) => !viewIds.includes(navigation.viewId))) context.addIssue({ code: "custom", message: "Checkpoint references an unknown console view." });
   for (const item of console.forms) for (const candidate of item.fields) {
     if (candidate.type === "select" && !candidate.options?.length) context.addIssue({ code: "custom", message: "Select fields require bounded options." });
   }

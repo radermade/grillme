@@ -41,7 +41,18 @@ export interface AwsLabPort {
   execute(leaseId: string, operation: import("@grillme/domain").AwsLabOperation): Promise<unknown>;
   revoke(leaseId: string): Promise<void>;
 }
+export interface ManagedConsolePort {
+  launch(labSessionId: string, policyId: string, policyVersion: string): Promise<unknown>;
+  restore(labSessionId: string): Promise<unknown | null>;
+  status(sessionId: string): Promise<unknown>;
+  budget(sessionId: string): Promise<unknown>;
+  validate(sessionId: string, checkpointId: string): Promise<unknown>;
+  revoke(sessionId: string): Promise<unknown>;
+  revokeForLab(labSessionId: string): Promise<unknown>;
+}
 export interface ReadinessEvidencePort { load(): Promise<unknown> }
+
+  export interface DriftMitigationPort { load(affectedId: string): Promise<unknown> }
 export interface ContentReportPort { submit(report: import("@grillme/domain").ContentReport): Promise<unknown> }
 export interface ProductAnalyticsPort {
   submit(events: import("@grillme/domain").ProductAnalyticsEvent[]): Promise<void>;

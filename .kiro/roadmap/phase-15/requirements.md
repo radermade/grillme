@@ -1,6 +1,6 @@
 # Phase 15 Requirements
 
-Status: planned; high-risk deployment requires explicit infrastructure and security approval
+Status: controlled local companion foundation complete; high-risk deployment requires explicit infrastructure, security, legal/AWS-usage, and operations approval
 
 ## R1: Managed console companion
 

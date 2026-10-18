@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   root: "apps/desktop",
+  publicDir: "../../packages/content/captures",
   plugins: [react()],
   clearScreen: false,
   server: { port: 1420, strictPort: true },

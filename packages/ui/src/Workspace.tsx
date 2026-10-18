@@ -17,7 +17,7 @@ import { ApplicationRail } from "./primitives";
 import { ThemeProvider, useTheme } from "./theme";
 
 const events = { course: "OPEN_COURSE", assessment: "OPEN_ASSESSMENT", grill: "OPEN_GRILL", training: "OPEN_TRAINING", console: "OPEN_CONSOLE", lab: "OPEN_LAB", readiness: "OPEN_READINESS", mock: "OPEN_MOCK", operations: "OPEN_OPERATIONS", review: "OPEN_REVIEW" } as const;
-const labels = { course: "Learn", assessment: "Baseline", grill: "Grill", training: "Training", console: "Console", lab: "Lab", readiness: "Readiness", mock: "Mock", operations: "Settings", review: "Review" } as const;
+const labels = { course: "Learn", assessment: "Baseline", grill: "Grill", training: "Scenarios", console: "Training", lab: "Lab", readiness: "Readiness", mock: "Mock", operations: "Settings", review: "Review" } as const;
 const views = Object.keys(events) as WorkspaceView[];
 
 export function Workspace() {

@@ -203,6 +203,15 @@ export const restrictedAws: import("@grillme/platform").AwsLabPort = {
   execute: (leaseId, operation) => request("/aws-lab/execute", { leaseId, operation }),
   async revoke(leaseId) { await request("/aws-lab/revoke", { leaseId }); },
 };
+export const managedConsole: import("@grillme/platform").ManagedConsolePort = {
+  launch: (labSessionId, policyId, policyVersion) => request("/managed-console/launch", { labSessionId, policyId, policyVersion }),
+  restore: (labSessionId) => request("/managed-console/restore", { labSessionId }),
+  status: (sessionId) => request("/managed-console/status", { sessionId }),
+  budget: (sessionId) => request("/managed-console/budget", { sessionId }),
+  validate: (sessionId, checkpointId) => request("/managed-console/validate", { sessionId, checkpointId }),
+  revoke: (sessionId) => request("/managed-console/revoke", { sessionId }),
+  revokeForLab: (labSessionId) => request("/managed-console/revoke-for-lab", { labSessionId }),
+};
 
 export const readinessEvidence: import("@grillme/platform").ReadinessEvidencePort = {
   async load() {

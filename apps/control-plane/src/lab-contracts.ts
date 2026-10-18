@@ -19,5 +19,5 @@ export interface LabAuditService { record(event: LabAuditEvent): Promise<void> }
 export interface LabCompatibilityService {
   resolve(labId: string, labVersion: string): Promise<{ compatibility: CompatibilityEntry; bundle: ValidatorBundle; health: ValidatorHealth }>;
 }
-export type LabServiceDependencies = { auth: AuthService; entitlements: LabEntitlementService; quota: LabQuotaService; definitions: LabDefinitionRepository; sessions: LabSessionStore; provider: SandboxProvider; compatibility: LabCompatibilityService; audit: LabAuditService; ids: { create(): string }; clock: { now(): string }; credentialRevoker?: { revokeForSession(sessionId: string): Promise<void> } };
+export type LabServiceDependencies = { auth: AuthService; entitlements: LabEntitlementService; quota: LabQuotaService; definitions: LabDefinitionRepository; sessions: LabSessionStore; provider: SandboxProvider; compatibility: LabCompatibilityService; audit: LabAuditService; ids: { create(): string }; clock: { now(): string }; credentialRevoker?: { revokeForSession(sessionId: string): Promise<void> }; managedConsoleRevoker?: { revokeForSession(sessionId: string): Promise<void> } };
 export type LabProvisionResponse = { session: LabSession; connectionTicket: string };

@@ -1,6 +1,6 @@
 # Phase 12 Requirements
 
-Status: implementation complete; manual accessibility and product review pending
+Status: semantic engine complete; exact walkthrough UX incomplete pending reviewed capture coverage
 
 ## R1: Semantic console model
 
@@ -11,10 +11,12 @@ Status: implementation complete; manual accessibility and product review pending
 
 ## R2: Guidance modes
 
-1. One scenario runs as walkthrough, practice, and challenge over the same state and validators.
-2. Walkthroughs show intent, current console mapping, rationale, and expected observable outcome.
-3. Practice progressively reduces guidance; challenge exposes objectives and validation only.
-4. Guidance records console-mapping version and last verification date.
+1. Walkthrough mode is pixel-accurate to reviewed, hash-pinned AWS Console captures at a declared viewport; it does not use an AWS-like reconstruction.
+2. Our accessible fields, operations, resources, and navigation hotspots overlay versioned normalized anchor rectangles on those captures.
+3. Every capture records source origin, region, viewport, capture date, reviewer, screenshot hash, semantic version, AWS version, and presentation version.
+4. Missing, stale, unapproved, hash-mismatched, or incompletely anchored capture coverage blocks walkthrough mode.
+5. Practice may use a clearly labeled semantic reconstruction; challenge exposes objectives and validation only.
+6. Drift creates review work and invalidates affected captures; it never auto-adjusts anchors or publishes replacement scenes.
 
 ## Exit criteria
 

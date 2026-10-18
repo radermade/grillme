@@ -111,6 +111,34 @@ export const apiOperations = {
   "evaluateFreeResponse": {
     "method": "POST",
     "path": "/evaluation"
+  },
+  "launchManagedConsole": {
+    "method": "POST",
+    "path": "/managed-console/launch"
+  },
+  "restoreManagedConsole": {
+    "method": "POST",
+    "path": "/managed-console/restore"
+  },
+  "getManagedConsoleStatus": {
+    "method": "POST",
+    "path": "/managed-console/status"
+  },
+  "getManagedConsoleBudget": {
+    "method": "POST",
+    "path": "/managed-console/budget"
+  },
+  "validateManagedConsole": {
+    "method": "POST",
+    "path": "/managed-console/validate"
+  },
+  "revokeManagedConsole": {
+    "method": "POST",
+    "path": "/managed-console/revoke"
+  },
+  "revokeManagedConsoleForLab": {
+    "method": "POST",
+    "path": "/managed-console/revoke-for-lab"
   }
 } as const;
 export type ApiOperationId = keyof typeof apiOperations;

@@ -25,6 +25,7 @@ export const createLabService = (deps: LabServiceDependencies) => {
   };
   const stopRecord = async (record: LabSessionRecord, operation: "stop" | "expire") => {
     if (!record.stopped) {
+      await deps.managedConsoleRevoker?.revokeForSession(record.session.id);
       await deps.credentialRevoker?.revokeForSession(record.session.id);
       await deps.provider.destroy(record.environmentId);
     }

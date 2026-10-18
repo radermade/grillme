@@ -1,6 +1,6 @@
 # Phase 16 Requirements
 
-Status: planned; depends on Phases 12-15 evidence
+Status: controlled local workflow and authoring foundation complete; deployed ownership, live evidence, and operations review pending
 
 ## R1: Operationalize drift response
 

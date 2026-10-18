@@ -27,3 +27,4 @@ export { createReleaseMachine } from "./release";
 export { createSupportMachine } from "./support";
 export { createThemeMachine } from "./theme";
 export { createConsoleSessionMachine } from "./console-session";
+export { createManagedConsoleMachine } from "./managed-console";

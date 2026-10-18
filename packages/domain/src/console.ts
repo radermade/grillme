@@ -48,6 +48,7 @@ export type SemanticConsoleCheckpoint = {
   instruction: string;
   rationale: string;
   expectedOutcome: string;
+  navigation: { viewId: string; resourceId: string | null };
   hints: string[];
 };
 export type SemanticConsoleDefinition = {
@@ -67,7 +68,7 @@ export type SemanticConsoleDefinition = {
     lastVerifiedAt: string;
   };
   services: { id: string; targetId: string; name: string; description: string }[];
-  views: { id: string; targetId: string; serviceId: string; title: string; type: "list" | "details" | "form" | "logs" }[];
+  views: { id: string; targetId: string; serviceId: string; title: string; type: "list" | "details" | "form" | "logs"; resourceTypes: string[] }[];
   forms: { id: string; targetId: string; title: string; fields: SemanticConsoleField[] }[];
   operations: SemanticConsoleOperation[];
   checkpoints: SemanticConsoleCheckpoint[];
@@ -125,3 +126,37 @@ export type ConsoleEvidenceEvent = {
   attemptNumber: number;
   occurredAt: string;
 };
+export type ConsoleCaptureAnchor = {
+  id: string;
+  kind: "navigate" | "field" | "operation" | "resource";
+  targetId: string;
+  fieldId: string | null;
+  operationId: string | null;
+  resourceId: string | null;
+  label: string;
+  rect: { x: number; y: number; width: number; height: number };
+};
+export type ConsoleCaptureScene = {
+  schemaVersion: 1;
+  id: string;
+  version: string;
+  scenarioId: string;
+  scenarioVersion: string;
+  checkpointId: string;
+  stepIndex: number;
+  status: "draft" | "reviewed" | "stale" | "withdrawn";
+  imagePath: string;
+  imageSha256: string;
+  viewport: { width: number; height: number; deviceScaleFactor: number };
+  sourceOrigin: string;
+  region: string;
+  semanticVersion: string;
+  awsVersion: string;
+  presentationVersion: string;
+  capturedAt: string;
+  reviewedAt: string | null;
+  reviewedBy: string | null;
+  accessibleDescription: string;
+  anchors: ConsoleCaptureAnchor[];
+};
+export type ConsoleCaptureCoverage = { ready: boolean; reason: string | null };

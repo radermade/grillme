@@ -1,3 +1,5 @@
+export * from "./drift-operations";
+export * from "./managed-console";
 export * from "./validator";
 export * from "./console-drift";
 export * from "./console";

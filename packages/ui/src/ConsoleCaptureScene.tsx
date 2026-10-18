@@ -1,0 +1,11 @@
+import type { CSSProperties } from "react";
+import type { ConsoleCaptureAnchor, ConsoleCaptureScene as Scene, ConsoleValue, SemanticConsoleField } from "@grillme/domain";
+
+const position = (anchor: ConsoleCaptureAnchor): CSSProperties => ({ left: `${anchor.rect.x * 100}%`, top: `${anchor.rect.y * 100}%`, width: `${anchor.rect.width * 100}%`, height: `${anchor.rect.height * 100}%` });
+export function ConsoleCaptureScene({ scene, fields, values, onField, onNavigate, onOperation, onResource }: { scene: Scene; fields: SemanticConsoleField[]; values: Record<string, ConsoleValue>; onField(fieldId: string, value: ConsoleValue): void; onNavigate(): void; onOperation(): void; onResource(resourceId: string): void }) {
+  return <section className="capture-stage" aria-label="Reviewed AWS Console walkthrough scene"><div className="capture-viewport" style={{ aspectRatio: `${scene.viewport.width} / ${scene.viewport.height}` }}><img src={scene.imagePath} alt={scene.accessibleDescription} width={scene.viewport.width} height={scene.viewport.height} />{scene.anchors.map((anchor) => {
+    const field = anchor.fieldId ? fields.find(({ id }) => id === anchor.fieldId) : null;
+    if (anchor.kind === "field" && field) return <label className="capture-control capture-field" style={position(anchor)} key={anchor.id}><span className="sr-only">{field.label}</span>{field.type === "select" ? <select value={String(values[field.id] ?? "")} onChange={(event) => onField(field.id, event.target.value)}>{field.options?.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input value={String(values[field.id] ?? "")} maxLength={field.maxLength} onChange={(event) => onField(field.id, event.target.value)} />}</label>;
+    return <button key={anchor.id} className={`capture-control capture-hotspot ${anchor.kind}`} style={position(anchor)} aria-label={anchor.label} onClick={anchor.kind === "navigate" ? onNavigate : anchor.kind === "operation" ? onOperation : () => anchor.resourceId && onResource(anchor.resourceId)}><span>{anchor.label}</span></button>;
+  })}</div><p className="capture-provenance">Capture {scene.version} · {scene.region} · {scene.viewport.width}×{scene.viewport.height} · reviewed {scene.reviewedAt}</p></section>;
+}

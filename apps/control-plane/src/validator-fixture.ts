@@ -44,3 +44,16 @@ export const healthyBedrockSimulatorValidator = {
   compatibilityId: bedrockSimulatorCompatibility.id,
   compatibilityVersion: bedrockSimulatorCompatibility.version,
 };
+export const bedrockManagedCompatibility: CompatibilityEntry = {
+  ...bedrockControlledCompatibility,
+  id: "bedrock-managed-us-east-1",
+  provider: "managed-aws",
+  sdkApiVersion: "managed-controlled-1",
+  providerAdapterVersion: "controlled-managed-1.0.0",
+  knownLimitations: ["Controlled local provider only; no AWS environment is allocated."],
+};
+export const healthyBedrockManagedValidator = {
+  ...healthyBedrockControlledValidator,
+  compatibilityId: bedrockManagedCompatibility.id,
+  compatibilityVersion: bedrockManagedCompatibility.version,
+};

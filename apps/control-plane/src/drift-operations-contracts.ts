@@ -1,0 +1,13 @@
+import type { DriftActor, DriftAuthoringProposal, DriftCanaryEvidence, DriftCase, DriftRelease, DriftRollback, LearnerDriftMitigation, PublishedArtifact } from "@grillme/domain";
+
+export interface DriftOperatorAuth { authorize(authorization: string): Promise<DriftActor | null> }
+export interface DriftCaseStore { get(id: string): Promise<DriftCase | null>; findBySource(type: DriftCase["sources"][number]["type"], sourceId: string): Promise<DriftCase | null>; put(value: DriftCase): Promise<void>; create(value: DriftCase): Promise<boolean> }
+export interface DriftProposalStore { get(id: string): Promise<DriftAuthoringProposal | null>; put(value: DriftAuthoringProposal): Promise<void>; history(artifactId: string): Promise<DriftAuthoringProposal[]> }
+export interface DriftReleaseStore { get(id: string): Promise<DriftRelease | null>; put(value: DriftRelease): Promise<void>; putRollback(value: DriftRollback): Promise<void> }
+export interface LearnerMitigationStore { put(value: LearnerDriftMitigation): Promise<void>; list(caseId: string): Promise<LearnerDriftMitigation[]>; listByAffected(affectedId: string): Promise<LearnerDriftMitigation[]>; clear(caseId: string, clearedAt: string): Promise<void> }
+export interface DriftMitigationController { markGuidanceStale(affectedIds: string[]): Promise<void>; disableProvisioning(affectedIds: string[]): Promise<void>; disableValidators(affectedIds: string[]): Promise<void>; notifyActiveSessions(input: { caseId: string; affectedIds: string[]; notice: string; allowContinuation: boolean }): Promise<string[]>; clear(caseId: string): Promise<void> }
+export interface DriftCanaryRunner { run(proposal: DriftAuthoringProposal): Promise<unknown>; get(id: string): Promise<DriftCanaryEvidence | null>; }
+export interface PublishedArtifactStore { get(type: PublishedArtifact["artifactType"], id: string, version: string): Promise<PublishedArtifact | null>; publish(value: PublishedArtifact): Promise<void>; withdraw(type: PublishedArtifact["artifactType"], id: string, version: string): Promise<void> }
+export interface ActiveSessionRepository { listAffected(affectedIds: string[]): Promise<string[]> }
+export interface DriftOperationsAudit { append(caseId: string, event: DriftCase["events"][number]): Promise<void> }
+export type DriftOperationsDependencies = { auth: DriftOperatorAuth; cases: DriftCaseStore; proposals: DriftProposalStore; releases: DriftReleaseStore; mitigations: LearnerMitigationStore; mitigationController: DriftMitigationController; canaries: DriftCanaryRunner; artifacts: PublishedArtifactStore; sessions: ActiveSessionRepository; audit: DriftOperationsAudit; ids: { create(): string }; clock: { now(): string } };

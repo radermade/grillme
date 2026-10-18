@@ -1,6 +1,6 @@
 # Phase 12 Tasks
 
-Status: implementation complete; manual keyboard/accessibility review and learner comparison pending
+Status: semantic engine complete; exact capture-backed walkthrough blocked pending reviewed AWS Console captures and manual accessibility/product review
 
 - [x] Define semantic service, resource, relationship, view, form, operation, and outcome contracts.
 - [x] Define stable semantic target IDs and versioned AWS/presentation mappings.
@@ -10,7 +10,11 @@ Status: implementation complete; manual keyboard/accessibility review and learne
 - [x] Implement one Bedrock request/guardrail walkthrough in walkthrough, practice, and challenge modes.
 - [x] Add reset, revision, debrief, inconclusive validation, and safe unsupported-operation handling.
 - [x] Verify no click-path dependence and no arbitrary execution.
-- [ ] Run learner study comparing current workspace and semantic console simulation.
+- [x] Implement capture-scene schemas, normalized interactive anchors, shared asset packaging, hash verification, and fail-closed walkthrough gating.
+- [ ] Capture, redact, approve, hash, and anchor every screen required by the Bedrock create/configure/inspect/troubleshoot walkthrough.
+- [ ] Verify each capture against the declared viewport and current AWS presentation mapping.
+- [ ] Run exact walkthrough keyboard, screen-reader, zoom, and responsive review.
+- [ ] Run learner study comparing exact capture walkthrough, semantic practice, and managed-console challenge.
 
 ## Verification
 
@@ -27,7 +31,10 @@ Status: implementation complete; manual keyboard/accessibility review and learne
 
 ## Open review risks
 
-- Full keyboard operation, screen-reader announcements, zoom, contrast, reduced motion, and forced-color behavior require manual review.
+- Exact walkthrough is intentionally blocked because `console-captures.json` contains no reviewed scenes; `npm run console:captures:check` verifies this fail-closed state.
+- Capture assets use one canonical `packages/content/captures/console-captures/` source packaged by both app roots.
+- The Training navigation now opens the console simulation; the older abstract builder is labeled Scenarios.
+- Full keyboard operation, screen-reader announcements, zoom, capture scaling, and hotspot accuracy require manual review.
 - The simulator is deterministic and local; managed sandbox and real-console providers remain future implementations of the same `ConsolePort`.
 - The AWS and presentation mapping date is fixture metadata pending review by the future drift process; it must not be treated as externally verified production truth.
 - A learner comparison study has not been run.

@@ -4,6 +4,7 @@ import { createLabSessionMachine } from "@grillme/machines";
 import type { LabOperation } from "@grillme/domain";
 import { useUiRuntime } from "./runtime";
 import { AwsLabView } from "./AwsLabView";
+import { ManagedConsoleView } from "./ManagedConsoleView";
 
 import { CommandBar } from "./primitives";
 const operations: Array<{ id: LabOperation; label: string }> = [
@@ -39,6 +40,7 @@ export function LabView() {
     <fieldset><legend>Workspace operations</legend>{operations.map((operation) => <button className="secondary" key={operation.id} onClick={() => send({ type: "OPERATE", operation: operation.id })}>{operation.label}</button>)}</fieldset>
     {progress.lastValidation && <section className={`result ${progress.lastValidation.status === "passed" ? "strong" : "weak"}`} aria-live="polite"><h2>Server validation: {progress.lastValidation.status}</h2>{progress.lastValidation.feedback.length ? <ul>{progress.lastValidation.feedback.map((message) => <li key={message}>{message}</li>)}</ul> : <p>All observable checks passed.</p>}<p className="form-help">Validator {progress.lastValidation.provenance.validatorId} {progress.lastValidation.provenance.validatorVersion} · mapping {progress.lastValidation.provenance.mappingVersion} · template {progress.lastValidation.provenance.templateVersion} · {progress.lastValidation.provenance.region}</p></section>}
     <AwsLabView labSessionId={progress.sessionId} />
+    <ManagedConsoleView labSessionId={progress.sessionId} checkpointId={checkpoint.id} />
     <CommandBar label="Lab actions">{progress.hintLevel < checkpoint.hints.length && <button className="secondary" onClick={() => send({ type: "SHOW_HINT" })}>Show hint</button>}<button className="primary" disabled={progress.attempts >= lab.maxAttempts} onClick={() => send({ type: "VALIDATE" })}>Validate remotely</button><button className="secondary" onClick={() => send({ type: "STOP" })}>End lab</button></CommandBar>
   </main>;
 }

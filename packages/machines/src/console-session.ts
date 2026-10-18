@@ -1,20 +1,22 @@
 import { assign, fromPromise, setup } from "xstate";
-import { parseConsoleOperationResult, parseConsoleProgress, parseConsoleValidation, parseSemanticConsole } from "@grillme/content";
-import type { AppError, ConsoleEvidenceEvent, ConsoleProgress, ConsoleValidation, ConsoleValue, SemanticConsoleDefinition, SemanticConsoleField, SemanticConsoleState, ScenarioMode } from "@grillme/domain";
+import { consoleCaptureCoverage, parseConsoleCaptureScenes, parseConsoleOperationResult, parseConsoleProgress, parseConsoleValidation, parseSemanticConsole } from "@grillme/content";
+import type { AppError, ConsoleCaptureScene, ConsoleEvidenceEvent, ConsoleProgress, ConsoleValidation, ConsoleValue, SemanticConsoleDefinition, SemanticConsoleField, SemanticConsoleState, ScenarioMode } from "@grillme/domain";
 import type { ConsolePort, PlatformPorts } from "@grillme/platform";
 
 const clone = <T>(value: T): T => structuredClone(value);
 const progressKey = (definition: SemanticConsoleDefinition, mode: ScenarioMode) => `console-progress:${definition.id}:${definition.version}:${mode}`;
-type Context = { definition: SemanticConsoleDefinition; mode: ScenarioMode | null; progress: ConsoleProgress | null; draft: Record<string, ConsoleValue>; validation: ConsoleValidation | null; error: AppError | null };
-type Event = { type: "SELECT_MODE"; mode: ScenarioMode } | { type: "START" } | { type: "SET_FIELD"; fieldId: string; value: ConsoleValue } | { type: "OPERATE" } | { type: "SHOW_HINT" } | { type: "VALIDATE" } | { type: "REVISE" } | { type: "RESET" } | { type: "CONTINUE" } | { type: "RETRY" } | { type: "CONTINUE_OFFLINE" };
+type Context = { definition: SemanticConsoleDefinition; captureScenes: ConsoleCaptureScene[]; walkthroughReady: boolean; walkthroughUnavailableReason: string | null; mode: ScenarioMode | null; progress: ConsoleProgress | null; selectedViewId: string | null; selectedResourceId: string | null; sceneStep: number; draft: Record<string, ConsoleValue>; validation: ConsoleValidation | null; error: AppError | null };
+type Event = { type: "SELECT_MODE"; mode: ScenarioMode } | { type: "START" } | { type: "SELECT_VIEW"; viewId: string } | { type: "SELECT_RESOURCE"; resourceId: string } | { type: "ADVANCE_SCENE" } | { type: "SET_FIELD"; fieldId: string; value: ConsoleValue } | { type: "OPERATE" } | { type: "SHOW_HINT" } | { type: "VALIDATE" } | { type: "REVISE" } | { type: "RESET" } | { type: "CONTINUE" } | { type: "RETRY" } | { type: "CONTINUE_OFFLINE" };
 type Loaded = { progress: ConsoleProgress };
 type Operated = { state: SemanticConsoleState };
 type Validated = { validation: ConsoleValidation; progress: ConsoleProgress };
 type Done<T> = { output: T };
 const output = <T>(event: unknown) => (event as Done<T>).output;
 
-export function createConsoleSessionMachine(source: unknown, provider: ConsolePort, ports: PlatformPorts) {
+export function createConsoleSessionMachine(source: unknown, captureSource: unknown, provider: ConsolePort, ports: PlatformPorts) {
   const definition = parseSemanticConsole(source);
+  const captureScenes = parseConsoleCaptureScenes(captureSource);
+  const coverage = consoleCaptureCoverage(definition, captureScenes);
   const checkpoint = (context: Context) => context.definition.checkpoints[context.progress?.checkpointIndex ?? -1];
   const operation = (context: Context) => context.definition.operations.find(({ id }) => id === checkpoint(context)?.operationId);
   const form = (context: Context) => context.definition.forms.find(({ id }) => id === operation(context)?.formId);
@@ -55,18 +57,28 @@ export function createConsoleSessionMachine(source: unknown, provider: ConsolePo
       }),
     },
     guards: {
-      validMode: ({ event }) => event.type === "SELECT_MODE" && ["walkthrough", "practice", "challenge"].includes(event.mode),
+      validMode: ({ context, event }) => event.type === "SELECT_MODE" && ["walkthrough", "practice", "challenge"].includes(event.mode) && (event.mode !== "walkthrough" || context.walkthroughReady),
       walkthrough: ({ context }) => context.mode === "walkthrough",
       validField: ({ context, event }) => event.type === "SET_FIELD" && !!form(context)?.fields.some((field) => field.id === event.fieldId && (field.type !== "select" || !!field.options?.some(({ value }) => value === event.value)) && (typeof event.value !== "string" || event.value.length <= (field.maxLength ?? 500))),
+      validView: ({ context, event }) => event.type === "SELECT_VIEW" && context.definition.views.some(({ id }) => id === event.viewId),
+      validResource: ({ context, event }) => event.type === "SELECT_RESOURCE" && !!context.progress?.state.resources.some(({ id }) => id === event.resourceId),
       complete: ({ context }) => complete(context),
       canHint: ({ context }) => context.mode === "practice" && (context.progress?.hintLevel ?? 0) < (checkpoint(context)?.hints.length ?? 0),
+      hasNextScene: ({ context }) => {
+        const item = checkpoint(context); if (!item) return false;
+        const count = context.captureScenes.filter((scene) => scene.checkpointId === item.id).length;
+        return context.sceneStep + 1 < count;
+      },
       passed: ({ context }) => context.validation?.status === "passed",
       inconclusive: ({ context }) => context.validation?.status === "inconclusive",
       more: ({ context }) => !!context.progress && context.progress.checkpointIndex + 1 < definition.checkpoints.length,
     },
     actions: {
       selectMode: assign(({ event }) => event.type === "SELECT_MODE" ? { mode: event.mode, error: null } : {}),
-      loaded: assign(({ event }) => { const progress = output<Loaded>(event).progress; const fields = definition.forms.find(({ id }) => id === definition.operations.find(({ id }) => id === definition.checkpoints[progress.checkpointIndex]?.operationId)?.formId)?.fields ?? []; return { progress, draft: initialDraft(fields), error: null }; }),
+      loaded: assign(({ event }) => { const progress = output<Loaded>(event).progress; const item = definition.checkpoints[progress.checkpointIndex]; const fields = definition.forms.find(({ id }) => id === definition.operations.find(({ id }) => id === item?.operationId)?.formId)?.fields ?? []; return { progress, selectedViewId: item?.navigation.viewId ?? definition.views[0]?.id ?? null, selectedResourceId: item?.navigation.resourceId ?? null, sceneStep: 0, draft: initialDraft(fields), error: null }; }),
+      selectView: assign(({ event }) => event.type === "SELECT_VIEW" ? { selectedViewId: event.viewId, selectedResourceId: null } : {}),
+      selectResource: assign(({ event }) => event.type === "SELECT_RESOURCE" ? { selectedResourceId: event.resourceId } : {}),
+      advanceScene: assign(({ context }) => ({ sceneStep: context.sceneStep + 1 })),
       failed: assign({ error: () => ({ code: "UNKNOWN" as const, message: "The semantic console could not complete that request safely." }) }),
       setField: assign(({ context, event }) => event.type === "SET_FIELD" ? { draft: { ...context.draft, [event.fieldId]: event.value } } : {}),
       operated: assign(({ context, event }) => context.progress ? { progress: { ...context.progress, state: output<Operated>(event).state, updatedAt: ports.clock.now() }, error: null } : {}),
@@ -101,17 +113,17 @@ export function createConsoleSessionMachine(source: unknown, provider: ConsolePo
         error: { code: "UNKNOWN" as const, message: "Validation is temporarily unavailable." },
       })),
       reset: assign(({ context }) => context.progress ? { progress: { ...context.progress, state: clone(context.progress.checkpointStart), hintLevel: 0, resets: context.progress.resets + 1, updatedAt: ports.clock.now() }, validation: null, draft: initialDraft(form(context)?.fields ?? []) } : {}),
-      next: assign(({ context }) => { if (!context.progress) return {}; const nextIndex = context.progress.checkpointIndex + 1; const nextCheckpoint = definition.checkpoints[nextIndex]; const nextOperation = definition.operations.find(({ id }) => id === nextCheckpoint?.operationId); const fields = definition.forms.find(({ id }) => id === nextOperation?.formId)?.fields ?? []; return { progress: { ...context.progress, checkpointIndex: nextIndex, checkpointStart: clone(context.progress.state), hintLevel: 0, resets: 0, attempts: 0, updatedAt: ports.clock.now() }, draft: initialDraft(fields), validation: null }; }),
+      next: assign(({ context }) => { if (!context.progress) return {}; const nextIndex = context.progress.checkpointIndex + 1; const nextCheckpoint = definition.checkpoints[nextIndex]; const nextOperation = definition.operations.find(({ id }) => id === nextCheckpoint?.operationId); const fields = definition.forms.find(({ id }) => id === nextOperation?.formId)?.fields ?? []; return { progress: { ...context.progress, checkpointIndex: nextIndex, checkpointStart: clone(context.progress.state), hintLevel: 0, resets: 0, attempts: 0, updatedAt: ports.clock.now() }, selectedViewId: nextCheckpoint?.navigation.viewId ?? null, selectedResourceId: nextCheckpoint?.navigation.resourceId ?? null, sceneStep: 0, draft: initialDraft(fields), validation: null }; }),
     },
   }).createMachine({
     id: "consoleSession", initial: "modeSelection",
-    context: { definition, mode: null, progress: null, draft: {}, validation: null, error: null },
+    context: { definition, captureScenes, walkthroughReady: coverage.ready, walkthroughUnavailableReason: coverage.reason, mode: null, progress: null, selectedViewId: definition.views[0]?.id ?? null, selectedResourceId: null, sceneStep: 0, draft: {}, validation: null, error: null },
     states: {
       modeSelection: { on: { SELECT_MODE: { target: "loading", guard: "validMode", actions: "selectMode" } } },
       loading: { invoke: { src: "load", input: ({ context }) => ({ context }), onDone: { target: "briefing", actions: "loaded" }, onError: { target: "failed", actions: "failed" } } },
       briefing: { on: { START: [{ target: "demonstrating", guard: "walkthrough" }, { target: "working" }] } },
       demonstrating: { on: { CONTINUE: "working" } },
-      working: { on: { SET_FIELD: { guard: "validField", actions: "setField" }, SHOW_HINT: { guard: "canHint", actions: "hinted" }, RESET: { actions: "reset" }, OPERATE: { target: "operating", guard: "complete" } } },
+      working: { on: { SELECT_VIEW: { guard: "validView", actions: "selectView" }, SELECT_RESOURCE: { guard: "validResource", actions: "selectResource" }, ADVANCE_SCENE: { guard: "hasNextScene", actions: "advanceScene" }, SET_FIELD: { guard: "validField", actions: "setField" }, SHOW_HINT: { guard: "canHint", actions: "hinted" }, RESET: { actions: "reset" }, OPERATE: { target: "operating", guard: "complete" } } },
       operating: { invoke: { src: "operate", input: ({ context }) => ({ context }), onDone: { target: "persistingOperation", actions: "operated" }, onError: { target: "operationFailed", actions: "failed" } } },
       persistingOperation: { invoke: { src: fromPromise<void, { context: Context }>(async ({ input }) => { const progress = input.context.progress; if (!progress) throw new Error("Progress unavailable."); await ports.storage.set(progressKey(definition, progress.mode), progress); }), input: ({ context }) => ({ context }), onDone: "readyToValidate", onError: { target: "degraded", actions: "failed" } } },
       degraded: { on: { RETRY: "persistingOperation", CONTINUE_OFFLINE: "readyToValidate" } },

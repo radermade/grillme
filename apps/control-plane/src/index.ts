@@ -3,7 +3,7 @@ export { parseEvaluationEnvelope, validateProviderResult } from "./schema";
 export { createEvaluationService } from "./service";
 
 export { createEvaluationHttpHandler } from "./http";
-export { createSessionService } from "./session";
+export { composePrivilegeCleanup, createSessionService } from "./session";
 export type { IdentityProvider, SessionGrant } from "./session";
 export { createMemoryEventStore } from "./memory-event-store";
 export { createSyncService, deriveSummary, SyncServiceError } from "./sync";
@@ -42,4 +42,14 @@ export { createControlledValidatorCanaryAdapter, createValidatorCanaryMachine } 
 export type { ValidatorCanaryAdapter, ValidatorCanaryDependencies } from "./validator-canary";
 export { createControlledCapabilityProbes, createLabCompatibilityService, createMemoryCompatibilityRegistry, createMemoryValidatorBundleRepository, createMemoryValidatorHealthStore, createMemoryValidatorIncidentStore } from "./validator-compatibility";
 export type { CapabilityProbeService, CompatibilityRegistry, ValidatorBundleRepository, ValidatorHealthStore, ValidatorIncidentStore } from "./validator-compatibility";
-export { bedrockControlledCompatibility, bedrockSimulatorCompatibility, bedrockValidatorBundle, healthyBedrockControlledValidator, healthyBedrockSimulatorValidator } from "./validator-fixture";
+export { bedrockControlledCompatibility, bedrockManagedCompatibility, bedrockSimulatorCompatibility, bedrockValidatorBundle, healthyBedrockControlledValidator, healthyBedrockManagedValidator, healthyBedrockSimulatorValidator } from "./validator-fixture";
+export { createManagedConsoleService, ManagedConsoleError } from "./managed-console";
+export { createManagedConsoleHttpHandlers } from "./managed-console-http";
+export { createControlledManagedConsoleProvider, createMemoryManagedConsoleAudit, createMemoryManagedConsoleStore } from "./managed-console-controlled";
+export type { ManagedConsoleAuditStore, ManagedConsoleDependencies, ManagedConsoleEntitlementService, ManagedConsoleProvider, ManagedConsoleRecord, ManagedConsoleStore } from "./managed-console-contracts";
+export { createDriftOperationsService, DriftOperationsError } from "./drift-operations";
+export { createDriftOperationsMachine } from "./drift-operations-machine";
+export { createControlledActiveSessions, createControlledCanaryRunner, createControlledDriftAuth, createControlledMitigationController, createMemoryDriftCaseStore, createMemoryDriftOperationsAudit, createMemoryDriftProposalStore, createMemoryDriftReleaseStore, createMemoryLearnerMitigationStore, createMemoryPublishedArtifactStore, driftSource } from "./drift-operations-controlled";
+export type { ActiveSessionRepository, DriftCanaryRunner, DriftCaseStore, DriftMitigationController, DriftOperationsAudit, DriftOperationsDependencies, DriftOperatorAuth, DriftProposalStore, DriftReleaseStore, LearnerMitigationStore, PublishedArtifactStore } from "./drift-operations-contracts";
+export { createDriftOperationsHttpHandlers } from "./drift-operations-http";
+export { createLearnerDriftMitigationService } from "./drift-mitigation";
